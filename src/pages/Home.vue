@@ -1,7 +1,7 @@
 <template>
 
 
-  <template v-if="false">
+  <template v-if="authed">
     <van-pull-refresh v-model="refreshing" @refresh="onRefresh" success-text="好好好！">
       <van-cell>
 
@@ -16,7 +16,7 @@
           finished-text="没有更多了"
           @load="onLoad"
       >
-        <van-cell v-for="item in list" :key="item" :title="item">
+        <van-cell v-for="item in list" :key="item as number" :title="item as number">
           好好好！
         </van-cell>
       </van-list>
@@ -33,14 +33,17 @@
       <van-col span="4"></van-col>
       <van-col span="4"></van-col>
       <van-col span="4">
-        <van-button round type="success" size="small">登录</van-button>
+        <van-button round type="success" size="small" @click="onAuth(0)">登录</van-button>
       </van-col>
       <van-col span="4">
-        <van-button round type="primary" size="small">注册</van-button>
+        <van-button round type="primary" size="small" @click="onAuth(1)">注册</van-button>
       </van-col>
       <van-col span="4"></van-col>
       <van-col span="4"></van-col>
     </van-row>
+    <!--    父组件操作子组件-->
+    <Auth ref="authParamRef"/>
+
   </template>
 
 
@@ -52,19 +55,40 @@
 
 </template>
 
-<script>
-import {ref} from "vue";
+<script lang="ts">
+import {defineComponent, Ref, ref} from "vue";
 import {showToast} from "vant";
+import Auth from "./Auth.vue";
 
-export default {
+
+export default defineComponent({
   setup() {
-    const list = ref([]);
+    const list: Ref<Number[]> = ref([]);
     const loading = ref(false);
     const finished = ref(false);
     const refreshing = ref(false);
-
-
+    const showAuth = ref(false);
+    const isLogin = ref(false);
+    const username = ref();
+    const password = ref();
     const count = ref(0);
+    const authed = ref(false);
+
+    authed.value = false;
+    const authParamRef = ref<InstanceType<typeof Auth>>();
+
+    // 根据点击判断登录or注册
+    const onAuth = (index: Number) => {
+      console.log(authParamRef.value)
+      authParamRef.value.authParam = true;
+      if (index === 0) {
+        console.log(index)
+        authParamRef.value.activeName = 'Login';
+      }else{
+        authParamRef.value.activeName = 'Register';
+        console.log(index)
+      }
+    }
     const onRefresh = () => {
       setTimeout(() => {
         showToast('刷新成功');
@@ -91,6 +115,13 @@ export default {
     };
 
     return {
+      authed,
+      authParamRef,
+      username,
+      password,
+      isLogin,
+      onAuth,
+      showAuth,
       list,
       onRefresh,
       refreshing,
@@ -99,13 +130,36 @@ export default {
       finished,
     };
   },
+  components: {
+    Auth
+  },
   name: "home.vue"
-}
+})
 
 </script>
 
 
 <style scoped>
+.username {
+  display: block;
+  width: 100%;
+  margin-bottom: 20px;
+  border: 0;
+  padding: 10px;
+  border-bottom: 1px solid rgb(128, 125, 125);
+  font-size: 15px;
+  outline: none;
+}
 
+.password {
+  display: block;
+  width: 100%;
+  margin-bottom: 20px;
+  border: 0;
+  padding: 10px;
+  border-bottom: 1px solid rgb(128, 125, 125);
+  font-size: 15px;
+  outline: none;
+}
 
 </style>
