@@ -1,4 +1,4 @@
-import Index from "../pages/Index.vue";
+import Index from "../pages/Home.vue";
 import Self from "../pages/Self.vue";
 import Settings from "../pages/Settings.vue";
 
