@@ -5,7 +5,7 @@
         <p></p>
         <van-row justify="center">
           <van-col span="6"></van-col>
-          <van-col span="6">
+          <van-col span="6" offset="2">
             <van-image
                 style="margin: 0 auto"
                 round
@@ -36,14 +36,14 @@
         <p></p>
         <van-row justify="center">
           <van-col span="6"></van-col>
-          <van-col span="6">
+          <van-col span="6" offset="3">
             <van-uploader :after-read="afterRead" />
           </van-col>
           <van-col span="6"></van-col>
         </van-row>
         <van-row justify="center">
           <van-col span="6"></van-col>
-          <van-col span="6">
+          <van-col span="6" offset="3">
             点击设头像
           </van-col>
           <van-col span="6"></van-col>

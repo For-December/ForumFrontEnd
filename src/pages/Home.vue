@@ -25,21 +25,20 @@
   <template v-else>
     <p></p>
     <van-row justify="center">
-      <van-col span="24" style="text-align: center">登录以了解更多……</van-col>
+      <van-col span="10" offset="2" style="text-align: center">登录以了解更多……</van-col>
     </van-row>
     <p></p>
     <van-row justify="center">
       <!--      加起来是24-->
-      <van-col span="4"></van-col>
-      <van-col span="4"></van-col>
-      <van-col span="4">
+
+<!--      设置居中样式不行，最终通过偏移量解决-->
+      <van-col span="4" offset="2">
         <van-button round type="success" size="small" @click="onAuth(0)">登录</van-button>
       </van-col>
-      <van-col span="4">
+      <van-col span="4" offset="2">
         <van-button round type="primary" size="small" @click="onAuth(1)">注册</van-button>
       </van-col>
-      <van-col span="4"></van-col>
-      <van-col span="4"></van-col>
+
     </van-row>
     <!--    父组件操作子组件-->
     <Auth ref="authParamRef"/>
@@ -84,7 +83,7 @@ export default defineComponent({
       if (index === 0) {
         console.log(index)
         authParamRef.value.activeName = 'Login';
-      }else{
+      } else {
         authParamRef.value.activeName = 'Register';
         console.log(index)
       }
