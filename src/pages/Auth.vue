@@ -2,6 +2,8 @@
   <van-popup v-model:show="authParam" position="bottom" style="width: 100%;height: 70%;">
     <van-tabs v-model:active="activeName">
       <van-tab title="登录" name="Login">
+
+        <div style="margin-left: 5%;margin-right: 5%">
         <p></p>
         <van-row justify="center">
           <van-col span="6"></van-col>
@@ -21,6 +23,28 @@
         <p></p>
         <!-- 输入任意文本 -->
         <van-field v-model="username" label="用户名"/>
+        <div>
+        <el-form v-model="form">
+          <el-form-item size="large">
+            <el-input v-model="form.username" maxlength="25" type="text" placeholder="用户名/邮箱">
+              <template #prefix>
+                <el-icon>
+                  <User/>
+                </el-icon>
+              </template>
+            </el-input>
+
+            <el-input v-model="form.password" maxlength="25" type="password" placeholder="密码">
+              <template #prefix>
+                <el-icon>
+                  <Lock/>
+                </el-icon>
+              </template>
+
+            </el-input>
+          </el-form-item>
+        </el-form>
+        </div>
         <!-- 输入手机号，调起手机号键盘 -->
         <!--        <van-field v-model="tel" type="tel" label="手机号" />-->
         <!-- 允许输入正整数，调起纯数字键盘 -->
@@ -29,15 +53,28 @@
         <!--        <van-field v-model="number" type="number" label="数字" />-->
         <!-- 输入密码 -->
         <van-field v-model="password" type="password" label="密码"/>
-        <van-button round type="success" size="large" @click="">登录</van-button>
+        <el-row>
+          <el-col :span="12" style="text-align: left">
+            <el-form-item>
+              <el-checkbox v-model="form.remember" label="记住我"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12" style="text-align: right">
+            <el-link type="success">忘记密码？</el-link>
+          </el-col>
+        </el-row>
+        <div>
+          <van-button round type="success" size="large" @click="">登录</van-button>
 
+        </div>
+        </div>
       </van-tab>
       <van-tab title="注册喵" name="Register">
         <p></p>
         <van-row justify="center">
           <van-col span="6"></van-col>
           <van-col span="6" offset="3">
-            <van-uploader :after-read="afterRead" />
+            <van-uploader :after-read="afterRead"/>
           </van-col>
           <van-col span="6"></van-col>
         </van-row>
@@ -78,12 +115,18 @@
 </template>
 
 <script>
-
-import {ref} from "vue";
+import {Lock, User} from '@element-plus/icons-vue'
+import {ref, reactive} from "vue";
 
 export default {
+  components: {Lock, User},
 
   setup() {
+    const form = reactive({
+      username: "",
+      password: "",
+      remember: false
+    });
     const authParam = ref(false)
     const activeName = ref('Register')
     const username = ref('')
@@ -95,6 +138,7 @@ export default {
       console.log(file);
     };
     return {
+      form,
       afterRead,
       email,
       username,
