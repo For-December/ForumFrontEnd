@@ -31,7 +31,7 @@
     <van-row justify="center">
       <!--      加起来是24-->
 
-<!--      设置居中样式不行，最终通过偏移量解决-->
+      <!--      设置居中样式不行，最终通过偏移量解决-->
       <van-col span="4" offset="2">
         <van-button round type="success" size="small" @click="onAuth(0)">登录</van-button>
       </van-col>
@@ -41,7 +41,7 @@
 
     </van-row>
     <!--    父组件操作子组件-->
-    <Auth ref="authParamRef"/>
+    <Auth ref="authParamRef" @login-success="loginSuccess"/>
 
   </template>
 
@@ -67,7 +67,6 @@ export default defineComponent({
     const finished = ref(false);
     const refreshing = ref(false);
     const showAuth = ref(false);
-    const isLogin = ref(false);
     const username = ref();
     const password = ref();
     const count = ref(0);
@@ -112,13 +111,16 @@ export default defineComponent({
         }
       }, 1000);
     };
+    const loginSuccess = () => {
+      authed.value = true;
+    }
 
     return {
+      loginSuccess,
       authed,
       authParamRef,
       username,
       password,
-      isLogin,
       onAuth,
       showAuth,
       list,

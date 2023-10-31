@@ -5,6 +5,7 @@ import {Button, NavBar, Popup} from "vant";
 // @ts-ignore
 import * as VueRouter from 'vue-router';
 import routes from "./config/router";
+import 'element-plus/dist/index.css'
 
 
 // 3. 创建路由实例并传递 `routes` 配置
@@ -15,6 +16,7 @@ const router = VueRouter.createRouter({
     history: VueRouter.createWebHashHistory(),
     routes, // `routes: routes` 的缩写
 })
+
 
 
 createApp(App)
