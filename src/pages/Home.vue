@@ -17,7 +17,12 @@
           @load="onLoad"
       >
         <van-cell v-for="item in list" :key="item as number" :title="item as number">
-          好好好！
+          <p>好好好！</p>
+          <p>好好好！</p>
+          <p>好好好！</p>
+          <p>好好好！</p>
+          <p>好好好！</p>
+          <p>好好好！</p>
         </van-cell>
       </van-list>
     </van-pull-refresh>
@@ -58,6 +63,7 @@
 import {defineComponent, Ref, ref} from "vue";
 import {showToast} from "vant";
 import Auth from "./Auth.vue";
+import {ElMessage} from "element-plus";
 
 
 export default defineComponent({
@@ -89,7 +95,8 @@ export default defineComponent({
     }
     const onRefresh = () => {
       setTimeout(() => {
-        showToast('刷新成功');
+        // showToast('刷新成功');
+        ElMessage.success("刷新成功！")
         refreshing.value = false;
         count.value++;
       }, 1000);

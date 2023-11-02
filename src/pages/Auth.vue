@@ -22,7 +22,7 @@
 
           <p></p>
           <!-- 输入任意文本 -->
-          <van-field v-model="username" label="用户名"/>
+<!--          <van-field v-model="username" label="用户名"/>-->
           <div>
             <el-form :model="form" :rules="rules" ref="formRef">
 
@@ -54,7 +54,7 @@
           <!-- 允许输入数字，调起带符号的纯数字键盘 -->
           <!--        <van-field v-model="number" type="number" label="数字" />-->
           <!-- 输入密码 -->
-          <van-field v-model="password" type="password" label="密码"/>
+<!--          <van-field v-model="password" type="password" label="密码"/>-->
           <el-row>
             <el-col :span="12" style="text-align: left">
               <el-form-item prop="remember">
@@ -87,6 +87,32 @@
           </van-col>
           <van-col span="6"></van-col>
         </van-row>
+
+
+        <div>
+          <el-form :model="form" :rules="rules" ref="formRef">
+
+            <el-form-item size="large" prop="username">
+              <el-input v-model="form.username" maxlength="25" type="text" placeholder="用户名/邮箱">
+                <template #prefix>
+                  <el-icon>
+                    <User/>
+                  </el-icon>
+                </template>
+              </el-input>
+            </el-form-item>
+
+            <el-form-item size="large" prop="password">
+              <el-input v-model="form.password" maxlength="25" type="password" placeholder="密码">
+                <template #prefix>
+                  <el-icon>
+                    <Lock/>
+                  </el-icon>
+                </template>
+              </el-input>
+            </el-form-item>
+          </el-form>
+        </div>
 
 
         <van-field v-model="email" label="邮箱"/>
