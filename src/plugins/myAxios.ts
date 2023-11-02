@@ -85,48 +85,48 @@ function deleteAccessToken() {
     sessionStorage.removeItem(authTokenKey)
 }
 
-function storeAccessToken(remember: boolean, token: string, expire: Date) {
-    const authObj = {token: token, expire: expire}
-    const str = JSON.stringify(authObj)
-    if (remember) {
-        localStorage.setItem(authTokenKey, str)
-    } else {
-        sessionStorage.setItem(authTokenKey, str)
-    }
-}
+// function storeAccessToken(remember: boolean, token: string, expire: Date) {
+//     const authObj = {token: token, expire: expire}
+//     const str = JSON.stringify(authObj)
+//     if (remember) {
+//         localStorage.setItem(authTokenKey, str)
+//     } else {
+//         sessionStorage.setItem(authTokenKey, str)
+//     }
+// }
 
-function internalPost(url: string, data: object, header: any, success: (data: any) => void, failure = defaultFailure, error = defaultError) {
-    myAxios.post(url, data, {headers: header}).then(({data}) => {
-        if (data.code === 200) {
-            success(data.data)
-        } else {
-            failure(data.message, data.code, url)
-        }
-    }).catch(err => error(err))
-}
+// function internalPost(url: string, data: object, header: any, success: (data: any) => void, failure = defaultFailure, error = defaultError) {
+//     myAxios.post(url, data, {headers: header}).then(({data}) => {
+//         if (data.code === 200) {
+//             success(data.data)
+//         } else {
+//             failure(data.message, data.code, url)
+//         }
+//     }).catch(err => error(err))
+// }
 
-function internalGet(url: string, header: any, success: any, failure: any, error = defaultError) {
-    myAxios.get(url, {headers: header}).then(({data}) => {
-        if (data.code === 200) {
-            success(data.data)
-        } else {
-            failure(data.message, data.code, url)
-        }
-    }).catch(err => error(err))
-}
+// function internalGet(url: string, header: any, success: any, failure: any, error = defaultError) {
+//     myAxios.get(url, {headers: header}).then(({data}) => {
+//         if (data.code === 200) {
+//             success(data.data)
+//         } else {
+//             failure(data.message, data.code, url)
+//         }
+//     }).catch(err => error(err))
+// }
 
-function login(username: string, password: string, remember: boolean, success: (data: any) => void) {
-    internalPost('/auth/login', {
-        username: username,
-        password: password
-    }, {
-        'Content-Type': 'application/x-www-form-urlencoded'
-    }, (data) => {
-        storeAccessToken(remember, data.token, data.expire)
-        ElMessage.success(`登录成功！欢迎${data.username}加入~`)
-        success(data)
-    })
-}
+// function login(username: string, password: string, remember: boolean, success: (data: any) => void) {
+//     internalPost('/auth/login', {
+//         username: username,
+//         password: password
+//     }, {
+//         'Content-Type': 'application/x-www-form-urlencoded'
+//     }, (data) => {
+//         storeAccessToken(remember, data.token, data.expire)
+//         ElMessage.success(`登录成功！欢迎${data.username}加入~`)
+//         success(data)
+//     })
+// }
 
 
 // myAxios.interceptors.request.use(
@@ -156,4 +156,6 @@ function login(username: string, password: string, remember: boolean, success: (
 //     return myAxios(config) as unknown as Promise<R>;
 // }
 
-export {login}
+export function request<T, R>(config: AxiosRequestConfig<T>): Promise<R> {
+    return myAxios(config) as unknown as Promise<R>;
+}
