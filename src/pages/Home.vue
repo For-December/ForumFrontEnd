@@ -64,7 +64,7 @@
 import {onMounted, reactive, Ref, ref} from "vue";
 import Auth from "./Auth.vue";
 import {ElMessage} from "element-plus";
-import {authTokenKey} from "@/plugins/myAxios.ts";
+import {takeAuthObj} from "@/plugins/myAxios.ts";
 import {userInfo} from "@/api/auth.ts";
 
 const list: Ref<Number[]> = ref([]);
@@ -78,11 +78,12 @@ const authed = ref(false);
 
 onMounted(() => {
   // 实现自动认证并登录
-  const token = localStorage.getItem(authTokenKey) || ''
-  if (token) {
-    userInfo().then((data) => {
+  const authObj = takeAuthObj();
+  console.log(authObj)
+  if (authObj) {
+    userInfo(authObj.username).then((data) => {
       authed.value=true;
-      console.log(data.username);
+      console.log(data);
     }).catch((err) => {
       console.log(err);
     })

@@ -11,16 +11,16 @@ export const login = (params: any): Promise<Authorize> => {
     });
 };
 
-export const userInfo = (username:string): Promise<UserInfo> => {
+export const userInfo = (username: string): Promise<UserInfo> => {
     return request({
         method: 'get',
         url: '/user/info',
-        data:username,
+        params: {username: username},
         headers: {'Content-Type': 'application/json'}
     });
 };
 
-export const logout = () =>{
+export const logout = () => {
     return request({
         method: 'get',
         url: '/auth/logout',

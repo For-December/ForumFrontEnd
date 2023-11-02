@@ -1,5 +1,6 @@
 import axios, {AxiosRequestConfig} from 'axios'
 import {ElMessage} from "element-plus";
+import Authorize = NetResp.Authorize;
 // 全局默认配置
 // axios.defaults.baseURL = 'https://api.example.com';
 // axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
@@ -16,7 +17,8 @@ myAxios.interceptors.request.use(
     config => {
         // 鉴权Header
         if (localStorage.getItem(authTokenKey)) {
-            (config.headers as any)['Authorization'] = 'Bearer ' + localStorage.getItem(authTokenKey);
+            const token = takeAuthObj().token;
+            (config.headers as any)['Authorization'] = 'Bearer ' + token;
         }
 
 
@@ -44,7 +46,6 @@ myAxios.interceptors.response.use(
         // 加号将后面的内容转换为数字，`?.`是可选链操作符，为空则表达式结果为undefined而非报错
         switch (+response?.status) {
             case 401: // 鉴权失败时执行此逻辑
-                localStorage.removeItem(authTokenKey)
                 if (response?.data.code !== 10005) {
                     ElMessage.warning(response?.data.msg || '鉴权失败！');
                 }
@@ -54,6 +55,7 @@ myAxios.interceptors.response.use(
                 break;
 
             default: // 未知错误
+                console.log(error)
                 console.log(response)
                 ElMessage.error('发生了一些奇怪的错误，请联系管理员')
 
@@ -72,32 +74,26 @@ myAxios.interceptors.response.use(
 //     ElMessage.warning('发生了一些奇怪的错误，请联系管理员')
 // }
 
-// function takeAccessToken(): any {
-//     const str = localStorage.getItem(authTokenKey) || sessionStorage.getItem(authTokenKey)
-//     if (!str) return null
-//     const authObj = JSON.parse(str)
-//     if (authObj.expire <= new Date()) {
-//         deleteAccessToken()
-//         ElMessage.warning('登录状态已过期，请重新登录')
-//         return null
-//     }
-//     return authObj.token
-// }
+export function takeAuthObj(): Authorize {
+    const str = localStorage.getItem(authTokenKey)
+    if (!str) return null
+    const authObj = JSON.parse(str)
+    if (authObj.expire <= new Date()) {
+        deleteAccessToken()
+        ElMessage.warning('登录状态已过期，请重新登录')
+        return null
+    }
+    return authObj
+}
 
-// function deleteAccessToken() {
-//     localStorage.removeItem(authTokenKey)
-//     sessionStorage.removeItem(authTokenKey)
-// }
+function deleteAccessToken() {
+    localStorage.removeItem(authTokenKey)
+}
 
-// function storeAccessToken(remember: boolean, token: string, expire: Date) {
-//     const authObj = {token: token, expire: expire}
-//     const str = JSON.stringify(authObj)
-//     if (remember) {
-//         localStorage.setItem(authTokenKey, str)
-//     } else {
-//         sessionStorage.setItem(authTokenKey, str)
-//     }
-// }
+export function storeAuthInfo(authObj: Authorize) {
+    const str = JSON.stringify(authObj)
+    localStorage.setItem(authTokenKey, str)
+}
 
 // function internalPost(url: string, data: object, header: any, success: (data: any) => void, failure = defaultFailure, error = defaultError) {
 //     myAxios.post(url, data, {headers: header}).then(({data}) => {

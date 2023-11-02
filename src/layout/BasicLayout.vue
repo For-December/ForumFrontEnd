@@ -38,6 +38,7 @@
       <van-sidebar-item class="test" to="settings" title="设置"/>
 
     </van-sidebar>
+
   </van-popup>
 </template>
 
