@@ -19,3 +19,10 @@ export const userInfo = (username:string): Promise<UserInfo> => {
         headers: {'Content-Type': 'application/json'}
     });
 };
+
+export const logout = () =>{
+    return request({
+        method: 'get',
+        url: '/auth/logout',
+    });
+};
