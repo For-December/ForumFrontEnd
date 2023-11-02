@@ -59,31 +59,31 @@ myAxios.interceptors.response.use(
     }
 )
 
-const defaultFailure = (message: string, code: number, url: string) => {
-    console.warn(`请求地址: ${url},状态码: ${code}, 错误信息: ${message}`)
-    ElMessage.warning(message)
-}
-const defaultError = (err: any) => {
-    console.error(err)
-    ElMessage.warning('发生了一些奇怪的错误，请联系管理员')
-}
+// const defaultFailure = (message: string, code: number, url: string) => {
+//     console.warn(`请求地址: ${url},状态码: ${code}, 错误信息: ${message}`)
+//     ElMessage.warning(message)
+// }
+// const defaultError = (err: any) => {
+//     console.error(err)
+//     ElMessage.warning('发生了一些奇怪的错误，请联系管理员')
+// }
 
-function takeAccessToken(): any {
-    const str = localStorage.getItem(authTokenKey) || sessionStorage.getItem(authTokenKey)
-    if (!str) return null
-    const authObj = JSON.parse(str)
-    if (authObj.expire <= new Date()) {
-        deleteAccessToken()
-        ElMessage.warning('登录状态已过期，请重新登录')
-        return null
-    }
-    return authObj.token
-}
+// function takeAccessToken(): any {
+//     const str = localStorage.getItem(authTokenKey) || sessionStorage.getItem(authTokenKey)
+//     if (!str) return null
+//     const authObj = JSON.parse(str)
+//     if (authObj.expire <= new Date()) {
+//         deleteAccessToken()
+//         ElMessage.warning('登录状态已过期，请重新登录')
+//         return null
+//     }
+//     return authObj.token
+// }
 
-function deleteAccessToken() {
-    localStorage.removeItem(authTokenKey)
-    sessionStorage.removeItem(authTokenKey)
-}
+// function deleteAccessToken() {
+//     localStorage.removeItem(authTokenKey)
+//     sessionStorage.removeItem(authTokenKey)
+// }
 
 // function storeAccessToken(remember: boolean, token: string, expire: Date) {
 //     const authObj = {token: token, expire: expire}
