@@ -39,27 +39,38 @@
 
     </van-sidebar>
 
+    <el-button @click="userLogout">退出登录</el-button>
   </van-popup>
 </template>
 
 <script setup>
 import {showToast} from 'vant';
-
-const onClickLeft = () => {
-  show.value = true;
-};
-const onClickRight = () => showToast('按钮');
-
+import {ElMessage} from "element-plus";
 import {ref} from 'vue';
 import Home from '../pages/Home.vue'
 import Self from '../pages/Self.vue'
 import Settings from '../pages/Settings.vue'
+import {logout} from "@/api/auth.ts";
+import {authed} from "@/plugins/globalData.ts";
+import {deleteAccessToken} from "@/plugins/myAxios.ts";
 
 
 const active = ref(0);
 const onChange = (index) => showToast(`标签 ${index}`);
 
 const show = ref(false);
+const onClickLeft = () => {
+  show.value = true;
+};
+const onClickRight = () => showToast('按钮');
+const userLogout = () => {
+  logout().then((data) => {
+    ElMessage.success("成功退出登录！");
+    authed.value = false;
+    show.value = false;
+    deleteAccessToken();
+  })
+}
 
 
 </script>

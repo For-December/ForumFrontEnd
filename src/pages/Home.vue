@@ -66,6 +66,7 @@ import Auth from "./Auth.vue";
 import {ElMessage} from "element-plus";
 import {takeAuthObj} from "@/plugins/myAxios.ts";
 import {userInfo} from "@/api/auth.ts";
+import {authed} from "@/plugins/globalData.ts";
 
 const list: Ref<Number[]> = ref([]);
 const loadPosts = reactive({
@@ -74,7 +75,7 @@ const loadPosts = reactive({
   refreshing: false,
 });
 const count = ref(0);
-const authed = ref(false);
+// const authed = ref(false);
 
 onMounted(() => {
   // 实现自动认证并登录
@@ -82,7 +83,8 @@ onMounted(() => {
   console.log(authObj)
   if (authObj) {
     userInfo(authObj.username).then((data) => {
-      authed.value=true;
+      authed.value = true;
+      // authed.value=true;
       console.log(data);
     }).catch((err) => {
       console.log(err);
@@ -111,7 +113,7 @@ const onAuth = (index: Number) => {
 const onRefresh = () => {
   setTimeout(() => {
     // showToast('刷新成功');
-    ElMessage.success("刷新成功！")
+    // ElMessage.success("刷新成功！")
     loadPosts.refreshing = false;
     count.value++;
   }, 1000);

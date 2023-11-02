@@ -86,7 +86,7 @@ export function takeAuthObj(): Authorize {
     return authObj
 }
 
-function deleteAccessToken() {
+export function deleteAccessToken() {
     localStorage.removeItem(authTokenKey)
 }
 
