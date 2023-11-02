@@ -148,6 +148,7 @@ import {ref, reactive} from "vue";
 // 这里引入后会继承上下文
 import {ElMessage} from 'element-plus'
 import {login} from "@/api/auth.ts";
+import {authTokenKey} from "@/plugins/myAxios.ts";
 
 const emit = defineEmits(['loginSuccess'])
 
@@ -180,10 +181,12 @@ const afterRead = (file) => {
 const userLogin = () => {
   formRef.value.validate((valid) => {
     if (valid) {
-      login(form).then((res) => {
+      login(form).then((data) => {
+        console.log(data);
         isShow.value = false;
         emit('loginSuccess');
         ElMessage.success("登陆成功！")
+        localStorage.setItem(authTokenKey, data.token)
       }).catch((err) => {
         console.log(err)
         console.log("出错了")

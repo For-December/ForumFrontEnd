@@ -10,13 +10,15 @@ const myAxios = axios.create({
     baseURL: 'http://localhost:8080/api/v1',
 });
 
-const authTokenKey = 'sukura_fox_token';
+export const authTokenKey = 'sukura_fox_token';
 myAxios.interceptors.request.use(
+    // 相当于 map 处理器，为config 添加内容
     config => {
         // 鉴权Header
         if (localStorage.getItem(authTokenKey)) {
             (config.headers as any)['Authorization'] = 'Bearer ' + localStorage.getItem(authTokenKey);
         }
+
 
         return config;
     },
@@ -26,6 +28,8 @@ myAxios.interceptors.request.use(
 )
 myAxios.interceptors.response.use(
     response => {
+
+        // 这里不再传递message了，因为是前端预期中的结果
         const {data = {}, code = 0} = response?.data || {};
         if (+code === 200) {
             return data || {};

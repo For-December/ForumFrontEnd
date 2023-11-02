@@ -6,7 +6,7 @@
     },
     "target": "ES2020",
     "useDefineForClassFields": true,
-    "module": "ESNext",
+    "module": "ESNext", // 解决cannot find namespace 问题，需要改为commonjs
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "types": [
       "node"

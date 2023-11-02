@@ -16,6 +16,7 @@
           finished-text="没有更多了"
           @load="onLoad"
       >
+
         <van-cell v-for="item in list" :key="item as number" :title="item as number">
           <p>好好好！</p>
           <p>好好好！</p>
@@ -60,18 +61,34 @@
 </template>
 
 <script setup lang="ts">
-import {reactive, Ref, ref} from "vue";
+import {onMounted, reactive, Ref, ref} from "vue";
 import Auth from "./Auth.vue";
 import {ElMessage} from "element-plus";
+import {authTokenKey} from "@/plugins/myAxios.ts";
+import {userInfo} from "@/api/auth.ts";
 
 const list: Ref<Number[]> = ref([]);
 const loadPosts = reactive({
-  loading:false,
-  finished:false,
-  refreshing:false,
+  loading: false,
+  finished: false,
+  refreshing: false,
 });
 const count = ref(0);
 const authed = ref(false);
+
+onMounted(() => {
+  // 实现自动认证并登录
+  const token = localStorage.getItem(authTokenKey) || ''
+  if (token) {
+    userInfo().then((data) => {
+      authed.value=true;
+      console.log(data.username);
+    }).catch((err) => {
+      console.log(err);
+    })
+
+  }
+})
 const loginSuccess = () => {
   authed.value = true;
 }
