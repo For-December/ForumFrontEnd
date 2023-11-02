@@ -2,7 +2,7 @@
 
 
   <template v-if="authed">
-    <van-pull-refresh v-model="refreshing" @refresh="onRefresh" success-text="好好好！">
+    <van-pull-refresh v-model="loadPosts.refreshing" @refresh="onRefresh" success-text="好好好！">
       <van-cell>
 
         <p>1</p>
@@ -11,8 +11,8 @@
         <p>1</p>
       </van-cell>
       <van-list
-          v-model:loading="loading"
-          :finished="finished"
+          v-model:loading="loadPosts.loading"
+          :finished="loadPosts.finished"
           finished-text="没有更多了"
           @load="onLoad"
       >
@@ -59,89 +59,62 @@
 
 </template>
 
-<script lang="ts">
-import {defineComponent, Ref, ref} from "vue";
+<script setup lang="ts">
+import {reactive, Ref, ref} from "vue";
 import Auth from "./Auth.vue";
 import {ElMessage} from "element-plus";
 
+const list: Ref<Number[]> = ref([]);
+const loadPosts = reactive({
+  loading:false,
+  finished:false,
+  refreshing:false,
+});
+const count = ref(0);
+const authed = ref(false);
+const loginSuccess = () => {
+  authed.value = true;
+}
+authed.value = false;
+const authNode = ref<InstanceType<typeof Auth>>();
 
-export default defineComponent({
-  setup() {
-    const list: Ref<Number[]> = ref([]);
-    const loading = ref(false);
-    const finished = ref(false);
-    const refreshing = ref(false);
-    const showAuth = ref(false);
-    const username = ref();
-    const password = ref();
-    const count = ref(0);
-    const authed = ref(false);
-
-    authed.value = false;
-    const authNode = ref<InstanceType<typeof Auth>>();
-
-    // 根据点击判断登录or注册
-    const onAuth = (index: Number) => {
-      console.log(authNode.value)
-      authNode.value.isShow = true;
-      if (index === 0) {
-        console.log(index)
-        authNode.value.activeName = 'Login';
-      } else {
-        authNode.value.activeName = 'Register';
-        console.log(index)
-      }
-    }
-    const onRefresh = () => {
-      setTimeout(() => {
-        // showToast('刷新成功');
-        ElMessage.success("刷新成功！")
-        refreshing.value = false;
-        count.value++;
-      }, 1000);
-    }
-    const onLoad = () => {
-      // 异步更新数据
-      // setTimeout 仅做示例，真实场景中一般为 ajax 请求
-      setTimeout(() => {
-        for (let i = 0; i < 10; i++) {
-          list.value.push(list.value.length + 1);
-        }
-
-        // 加载状态结束
-        loading.value = false;
-
-        // 数据全部加载完成
-        if (list.value.length >= 40) {
-          finished.value = true;
-        }
-      }, 1000);
-    };
-    const loginSuccess = () => {
-      authed.value = true;
+// 根据点击判断登录or注册
+const onAuth = (index: Number) => {
+  console.log(authNode.value)
+  authNode.value.isShow = true;
+  if (index === 0) {
+    console.log(index)
+    authNode.value.activeName = 'Login';
+  } else {
+    authNode.value.activeName = 'Register';
+    console.log(index)
+  }
+}
+const onRefresh = () => {
+  setTimeout(() => {
+    // showToast('刷新成功');
+    ElMessage.success("刷新成功！")
+    loadPosts.refreshing = false;
+    count.value++;
+  }, 1000);
+}
+const onLoad = () => {
+  // 异步更新数据
+  // setTimeout 仅做示例，真实场景中一般为 ajax 请求
+  setTimeout(() => {
+    for (let i = 0; i < 10; i++) {
+      list.value.push(list.value.length + 1);
     }
 
-    return {
-      loginSuccess,
-      authed,
-      authNode,
-      username,
-      password,
-      onAuth,
-      showAuth,
-      list,
-      onRefresh,
-      refreshing,
-      onLoad,
-      loading,
-      finished,
-    };
-  },
-  components: {
-    Auth
-  },
-  name: "home.vue"
-})
+    // 加载状态结束
+    loadPosts.refreshing = false;
+
+    // 数据全部加载完成
+    if (list.value.length >= 40) {
+      loadPosts.finished = true;
+    }
+  }, 1000);
+};
 
 </script>
 
