@@ -27,7 +27,7 @@ myAxios.interceptors.request.use(
 myAxios.interceptors.response.use(
     response => {
         const {data = {}, code = 0} = response?.data || {};
-        if (+code === 0) {
+        if (+code === 200) {
             return data || {};
         }
 

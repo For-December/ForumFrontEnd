@@ -22,7 +22,7 @@
 
           <p></p>
           <!-- 输入任意文本 -->
-<!--          <van-field v-model="username" label="用户名"/>-->
+          <!--          <van-field v-model="username" label="用户名"/>-->
           <div>
             <el-form :model="form" :rules="rules" ref="formRef">
 
@@ -54,7 +54,7 @@
           <!-- 允许输入数字，调起带符号的纯数字键盘 -->
           <!--        <van-field v-model="number" type="number" label="数字" />-->
           <!-- 输入密码 -->
-<!--          <van-field v-model="password" type="password" label="密码"/>-->
+          <!--          <van-field v-model="password" type="password" label="密码"/>-->
           <el-row>
             <el-col :span="12" style="text-align: left">
               <el-form-item prop="remember">
@@ -145,14 +145,15 @@
 <script>
 import {Lock, User} from '@element-plus/icons-vue'
 import {ref, reactive} from "vue";
-import {login} from '../plugins/myAxios.ts'
 // 这里引入后会继承上下文
-import { ElMessage } from 'element-plus'
+import {ElMessage} from 'element-plus'
+import {login} from "@/api/auth.ts";
+
 export default {
   components: {Lock, User},
-  props:['loginSuccess'], // 必须在这里指明参数
+  props: ['loginSuccess'], // 必须在这里指明参数
   emits: ['loginSuccess'],//注册
-  setup(props,{emit}) {
+  setup(props, {emit}) {
     const form = reactive({
       username: "",
       password: "",
@@ -181,11 +182,15 @@ export default {
     const userLogin = () => {
       formRef.value.validate((valid) => {
         if (valid) {
-          login(form.username, form.password, form.remember, () => {
+          login(form).then((res) => {
             authParam.value = false;
-            emit("loginSuccess",{});
-
+            emit("loginSuccess", {});
+            ElMessage.success("登陆成功！")
+          }).catch((err) => {
+            console.log(err)
+            console.log("出错了")
           });
+
 
           // ElMessage.success("哈哈哈哈哈！！！！！！")
         }
