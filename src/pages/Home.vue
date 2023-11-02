@@ -46,7 +46,7 @@
 
     </van-row>
     <!--    父组件操作子组件-->
-    <Auth ref="authParamRef" @login-success="loginSuccess"/>
+    <Auth ref="authNode" @login-success="loginSuccess"/>
 
   </template>
 
@@ -61,7 +61,6 @@
 
 <script lang="ts">
 import {defineComponent, Ref, ref} from "vue";
-import {showToast} from "vant";
 import Auth from "./Auth.vue";
 import {ElMessage} from "element-plus";
 
@@ -79,17 +78,17 @@ export default defineComponent({
     const authed = ref(false);
 
     authed.value = false;
-    const authParamRef = ref<InstanceType<typeof Auth>>();
+    const authNode = ref<InstanceType<typeof Auth>>();
 
     // 根据点击判断登录or注册
     const onAuth = (index: Number) => {
-      console.log(authParamRef.value)
-      authParamRef.value.authParam = true;
+      console.log(authNode.value)
+      authNode.value.isShow = true;
       if (index === 0) {
         console.log(index)
-        authParamRef.value.activeName = 'Login';
+        authNode.value.activeName = 'Login';
       } else {
-        authParamRef.value.activeName = 'Register';
+        authNode.value.activeName = 'Register';
         console.log(index)
       }
     }
@@ -125,7 +124,7 @@ export default defineComponent({
     return {
       loginSuccess,
       authed,
-      authParamRef,
+      authNode,
       username,
       password,
       onAuth,

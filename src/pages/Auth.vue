@@ -1,5 +1,5 @@
 <template>
-  <van-popup v-model:show="authParam" position="bottom" style="width: 100%;height: 70%;">
+  <van-popup v-model:show="isShow" position="bottom" style="width: 100%;height: 70%;">
     <van-tabs v-model:active="activeName">
       <van-tab title="登录" name="Login">
 
@@ -142,78 +142,63 @@
 
 </template>
 
-<script>
+<script setup>
 import {Lock, User} from '@element-plus/icons-vue'
 import {ref, reactive} from "vue";
 // 这里引入后会继承上下文
 import {ElMessage} from 'element-plus'
 import {login} from "@/api/auth.ts";
 
-export default {
-  components: {Lock, User},
-  props: ['loginSuccess'], // 必须在这里指明参数
-  emits: ['loginSuccess'],//注册
-  setup(props, {emit}) {
-    const form = reactive({
-      username: "",
-      password: "",
-      remember: false
-    });
-    const rules = {
-      username: [
-        {required: true, message: '请输入用户名'}
-      ],
-      password: [
-        {required: true, message: '请输入密码'}
-      ]
-    }
+const emit = defineEmits(['loginSuccess'])
 
 
-    const authParam = ref(false)
-    const activeName = ref('Register')
-    const username = ref('')
-    const password = ref('')
-    const passwordRetry = ref('')
-    const email = ref('')
-    const afterRead = (file) => {
-      // 此时可以自行将文件上传至服务器
-      console.log(file);
-    };
-    const userLogin = () => {
-      formRef.value.validate((valid) => {
-        if (valid) {
-          login(form).then((res) => {
-            authParam.value = false;
-            emit("loginSuccess", {});
-            ElMessage.success("登陆成功！")
-          }).catch((err) => {
-            console.log(err)
-            console.log("出错了")
-          });
-
-
-          // ElMessage.success("哈哈哈哈哈！！！！！！")
-        }
-      })
-    }
-    const formRef = ref();
-    return {
-      userLogin,
-      formRef,
-      rules,
-      form,
-      afterRead,
-      email,
-      username,
-      password,
-      passwordRetry,
-      authParam,
-      activeName,
-
-    };
-  },
-  name: "auth.vue"
+const form = reactive({
+  username: "",
+  password: "",
+  remember: false
+});
+const rules = {
+  username: [
+    {required: true, message: '请输入用户名'}
+  ],
+  password: [
+    {required: true, message: '请输入密码'}
+  ]
 }
+
+
+const isShow = ref(false)
+const activeName = ref('Register')
+const username = ref('')
+const password = ref('')
+const passwordRetry = ref('')
+const email = ref('')
+const afterRead = (file) => {
+  // 此时可以自行将文件上传至服务器
+  console.log(file);
+};
+const userLogin = () => {
+  formRef.value.validate((valid) => {
+    if (valid) {
+      login(form).then((res) => {
+        isShow.value = false;
+        emit('loginSuccess');
+        ElMessage.success("登陆成功！")
+      }).catch((err) => {
+        console.log(err)
+        console.log("出错了")
+      });
+
+
+      // ElMessage.success("哈哈哈哈哈！！！！！！")
+    }
+  })
+}
+const formRef = ref();
+defineExpose({
+  isShow,
+  activeName,
+})
 
 </script>
 
