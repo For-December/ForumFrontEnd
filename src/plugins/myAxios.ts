@@ -17,7 +17,7 @@ myAxios.interceptors.request.use(
     config => {
         // 鉴权Header
         if (localStorage.getItem(authTokenKey)) {
-            const token = takeAuthObj().token;
+            const token = takeAuthObj()?.token;
             (config.headers as any)['Authorization'] = 'Bearer ' + token;
         }
 
@@ -74,7 +74,7 @@ myAxios.interceptors.response.use(
 //     ElMessage.warning('发生了一些奇怪的错误，请联系管理员')
 // }
 
-export function takeAuthObj(): Authorize {
+export function takeAuthObj(): Authorize | null {
     const str = localStorage.getItem(authTokenKey)
     if (!str) return null
     const authObj = JSON.parse(str)
