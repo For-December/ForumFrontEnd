@@ -1,10 +1,6 @@
-import Index from "../pages/Home.vue";
-import Self from "../pages/Self.vue";
-import Settings from "../pages/Settings.vue";
-
 const routes = [
-    {path: '/', name: "home", component: Index},
-    {path: '/self', name: "self", component: Self},
-    {path: '/settings',name:'settings', component: Settings},
+    {path: '/', name: "home", component: () => import('@/pages/Home.vue')},
+    {path: '/self', name: "self", component: () => import('@/pages/Self.vue')},
+    {path: '/settings', name: 'settings', component: () => import('@/pages/Settings.vue')},
 ]
 export default routes;

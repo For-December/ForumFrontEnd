@@ -119,6 +119,7 @@ const onRefresh = () => {
   }, 1000);
 }
 const onLoad = () => {
+  ElMessage.warning("test")
   // 异步更新数据
   // setTimeout 仅做示例，真实场景中一般为 ajax 请求
   setTimeout(() => {
@@ -127,7 +128,7 @@ const onLoad = () => {
     }
 
     // 加载状态结束
-    loadPosts.refreshing = false;
+    loadPosts.loading = false;
 
     // 数据全部加载完成
     if (list.value.length >= 40) {
