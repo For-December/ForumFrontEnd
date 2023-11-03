@@ -2,6 +2,7 @@
 
 import {EditPen, Lock, Message, User} from "@element-plus/icons-vue";
 import {reactive, ref} from "vue";
+import {ElMessage} from "element-plus";
 
 
 const registerForm = reactive({
@@ -24,10 +25,19 @@ const rules = {
     {required: true, message: '请输入密码'}
   ]
 }
-const afterRead = (file) => {
+const afterRead = (file:any) => {
   // 此时可以自行将文件上传至服务器
   console.log(file);
 };
+
+const onRegister = ()=>{
+
+  emit('registerSuccess')
+  ElMessage.success('注册成功！')
+}
+defineExpose({
+  registerForm
+})
 
 const registerFormRef = ref();
 
@@ -119,7 +129,7 @@ const registerFormRef = ref();
 
     </el-form>
 
-    <van-button round type="primary" size="large" @click="">注册</van-button>
+    <van-button round type="primary" size="large" @click="onRegister">注册</van-button>
 
 
   </div>

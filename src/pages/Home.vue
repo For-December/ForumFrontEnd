@@ -101,12 +101,12 @@ const authNode = ref<InstanceType<typeof Auth>>();
 // 根据点击判断登录or注册
 const onAuth = (index: Number) => {
   console.log(authNode.value)
-  authNode.value.isShow = true;
+  authNode.value!.isShow = true; // ! 是非空断言，表明前面的一定不是空或者undefined
   if (index === 0) {
     console.log(index)
-    authNode.value.activeName = 'Login';
+    authNode.value!.activeName = 'Login';
   } else {
-    authNode.value.activeName = 'Register';
+    authNode.value!.activeName = 'Register';
     console.log(index)
   }
 }

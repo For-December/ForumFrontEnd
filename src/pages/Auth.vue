@@ -4,12 +4,12 @@
       <van-tab title="登录" name="Login">
 
         <!--        实现LoginPage定义的接口-->
-        <LoginPage @loginSuccess="loginSuccess"/>
+        <LoginPage ref="loginNode" @loginSuccess="loginSuccess"/>
 
       </van-tab>
       <van-tab title="注册喵" name="Register">
 
-        <RegisterPage @registerSuccess="registerSuccess"/>
+        <RegisterPage ref="registerNode" @registerSuccess="registerSuccess"/>
 
 
         <van-cell-group inset>
@@ -24,8 +24,7 @@
 
 </template>
 
-<script setup>
-import {EditPen, Lock, Message, User} from '@element-plus/icons-vue'
+<script setup lang="ts">
 import {ref} from "vue";
 import {authed} from "@/plugins/globalData.ts";
 import LoginPage from "@/pages/auths/LoginPage.vue";
@@ -36,6 +35,8 @@ const isShow = ref(false)
 const activeName = ref('Register')
 // login
 
+const loginNode =  ref<InstanceType<typeof LoginPage>>();
+const registerNode =  ref<InstanceType<typeof RegisterPage>>();
 // 定义接口保留给 Home.vue
 const emit = defineEmits(['loginSuccess'])
 const loginSuccess = () => {
