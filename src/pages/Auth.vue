@@ -24,10 +24,9 @@
           <!-- 输入任意文本 -->
           <!--          <van-field v-model="username" label="用户名"/>-->
           <div>
-            <el-form :model="form" :rules="rules" ref="formRef">
-
+            <el-form :model="loginForm" :rules="rules" ref="loginFormRef">
               <el-form-item size="large" prop="username">
-                <el-input v-model="form.username" maxlength="25" type="text" placeholder="用户名/邮箱">
+                <el-input v-model="loginForm.username" maxlength="25" type="text" placeholder="用户名/邮箱">
                   <template #prefix>
                     <el-icon>
                       <User/>
@@ -37,7 +36,7 @@
               </el-form-item>
 
               <el-form-item size="large" prop="password">
-                <el-input v-model="form.password" maxlength="25" type="password" placeholder="密码">
+                <el-input v-model="loginForm.password" maxlength="25" type="password" placeholder="密码">
                   <template #prefix>
                     <el-icon>
                       <Lock/>
@@ -58,7 +57,7 @@
           <el-row>
             <el-col :span="12" style="text-align: left">
               <el-form-item prop="remember">
-                <el-checkbox v-model="form.remember" label="记住我"/>
+                <el-checkbox v-model="loginForm.remember" label="记住我"/>
               </el-form-item>
             </el-col>
             <el-col :span="12" style="text-align: right">
@@ -67,33 +66,35 @@
           </el-row>
           <div>
             <van-button round type="success" size="large" @click="userLogin">登录</van-button>
-
           </div>
         </div>
       </van-tab>
       <van-tab title="注册喵" name="Register">
-        <p></p>
-        <van-row justify="center">
-          <van-col span="6"></van-col>
-          <van-col span="6" offset="3">
-            <van-uploader :after-read="afterRead"/>
-          </van-col>
-          <van-col span="6"></van-col>
-        </van-row>
-        <van-row justify="center">
-          <van-col span="6"></van-col>
-          <van-col span="6" offset="3">
-            点击设头像
-          </van-col>
-          <van-col span="6"></van-col>
-        </van-row>
 
+        <div style="margin-left: 8%;margin-right: 8%">
 
-        <div>
-          <el-form :model="form" :rules="rules" ref="formRef">
+          <p></p>
+          <van-row justify="center">
+            <van-col span="6"></van-col>
+            <van-col span="6" offset="3">
+              <van-uploader :after-read="afterRead"/>
+            </van-col>
+            <van-col span="6"></van-col>
+          </van-row>
+          <van-row justify="center">
+            <van-col span="6"></van-col>
+            <van-col span="6" offset="3">
+              点击设头像
+            </van-col>
+            <van-col span="6"></van-col>
+          </van-row>
 
-            <el-form-item size="large" prop="username">
-              <el-input v-model="form.username" maxlength="25" type="text" placeholder="用户名/邮箱">
+          <p></p>
+
+          <el-form :model="registerForm" :rules="rules" ref="registerFormRef">
+
+            <el-form-item size="default" prop="username">
+              <el-input v-model="registerForm.username" maxlength="25" type="text" placeholder="用户名">
                 <template #prefix>
                   <el-icon>
                     <User/>
@@ -102,8 +103,8 @@
               </el-input>
             </el-form-item>
 
-            <el-form-item size="large" prop="password">
-              <el-input v-model="form.password" maxlength="25" type="password" placeholder="密码">
+            <el-form-item size="default" prop="password">
+              <el-input v-model="registerForm.password" maxlength="25" type="password" placeholder="密码">
                 <template #prefix>
                   <el-icon>
                     <Lock/>
@@ -111,23 +112,67 @@
                 </template>
               </el-input>
             </el-form-item>
+
+            <el-form-item size="default" prop="passwordAgain">
+              <el-input v-model="registerForm.passwordAgain" maxlength="25" type="password" placeholder="再输一次密码">
+                <template #prefix>
+                  <el-icon>
+                    <Lock/>
+                  </el-icon>
+                </template>
+              </el-input>
+            </el-form-item>
+
+            <el-form-item size="default" prop="email">
+              <el-input v-model="registerForm.email" maxlength="25" type="text" placeholder="邮箱">
+                <template #prefix>
+                  <el-icon>
+                    <Message/>
+                  </el-icon>
+                </template>
+              </el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-row>
+                <el-col :span="15">
+                  <el-input v-model="registerForm.code" maxlength="6" type="text" placeholder="请输入验证码">
+                    <template #prefix>
+                      <el-icon>
+                        <EditPen/>
+                      </el-icon>
+                    </template>
+                  </el-input>
+
+                </el-col>
+                <el-col :span="2"></el-col>
+                <el-col :span="5">
+                  <el-button type="success">获取验证码</el-button>
+
+                </el-col>
+              </el-row>
+            </el-form-item>
+
+
           </el-form>
+
+          <van-button round type="primary" size="large" @click="">注册</van-button>
+
+
         </div>
 
 
-        <van-field v-model="email" label="邮箱"/>
-        <!-- 输入任意文本 -->
-        <van-field v-model="username" label="用户名"/>
-        <!-- 输入手机号，调起手机号键盘 -->
-        <!--        <van-field v-model="tel" type="tel" label="手机号" />-->
-        <!-- 允许输入正整数，调起纯数字键盘 -->
-        <!--        <van-field v-model="digit" type="digit" label="整数" />-->
-        <!-- 允许输入数字，调起带符号的纯数字键盘 -->
-        <!--        <van-field v-model="number" type="number" label="数字" />-->
-        <!-- 输入密码 -->
-        <van-field v-model="password" type="password" label="密码"/>
-        <van-field v-model="passwordRetry" type="password" label="再输密码"/>
-        <van-button round type="primary" size="large" @click="">注册</van-button>
+        <!--        <van-field v-model="email" label="邮箱"/>-->
+        <!--        &lt;!&ndash; 输入任意文本 &ndash;&gt;-->
+        <!--        <van-field v-model="username" label="用户名"/>-->
+        <!--        &lt;!&ndash; 输入手机号，调起手机号键盘 &ndash;&gt;-->
+        <!--        &lt;!&ndash;        <van-field v-model="tel" type="tel" label="手机号" />&ndash;&gt;-->
+        <!--        &lt;!&ndash; 允许输入正整数，调起纯数字键盘 &ndash;&gt;-->
+        <!--        &lt;!&ndash;        <van-field v-model="digit" type="digit" label="整数" />&ndash;&gt;-->
+        <!--        &lt;!&ndash; 允许输入数字，调起带符号的纯数字键盘 &ndash;&gt;-->
+        <!--        &lt;!&ndash;        <van-field v-model="number" type="number" label="数字" />&ndash;&gt;-->
+        <!--        &lt;!&ndash; 输入密码 &ndash;&gt;-->
+        <!--        <van-field v-model="password" type="password" label="密码"/>-->
+        <!--        <van-field v-model="passwordAgain" type="password" label="再输密码"/>-->
 
 
         <van-cell-group inset>
@@ -143,7 +188,7 @@
 </template>
 
 <script setup>
-import {Lock, User} from '@element-plus/icons-vue'
+import {EditPen, Lock, Message, User} from '@element-plus/icons-vue'
 import {ref, reactive} from "vue";
 // 这里引入后会继承上下文
 import {ElMessage} from 'element-plus'
@@ -153,11 +198,21 @@ import {storeAuthInfo} from "@/plugins/myAxios.ts";
 const emit = defineEmits(['loginSuccess'])
 
 
-const form = reactive({
+const loginForm = reactive({
   username: "",
   password: "",
   remember: false
 });
+
+const registerForm = reactive({
+  username: "",
+  password: "",
+  passwordAgain: "",
+  email: "",
+  code: "",
+});
+
+
 const rules = {
   username: [
     {required: true, message: '请输入用户名'}
@@ -168,20 +223,18 @@ const rules = {
 }
 
 
+
+
 const isShow = ref(false)
 const activeName = ref('Register')
-const username = ref('')
-const password = ref('')
-const passwordRetry = ref('')
-const email = ref('')
 const afterRead = (file) => {
   // 此时可以自行将文件上传至服务器
   console.log(file);
 };
 const userLogin = () => {
-  formRef.value.validate((valid) => {
+  loginFormRef.value.validate((valid) => {
     if (valid) {
-      login(form).then((data) => {
+      login(loginForm).then((data) => {
         console.log(data);
         isShow.value = false;
         emit('loginSuccess');
@@ -197,7 +250,8 @@ const userLogin = () => {
     }
   })
 }
-const formRef = ref();
+const loginFormRef = ref();
+const registerFormRef = ref();
 defineExpose({
   isShow,
   activeName,
