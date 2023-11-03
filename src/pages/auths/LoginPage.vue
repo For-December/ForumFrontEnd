@@ -2,6 +2,8 @@
 
 import {reactive, ref} from "vue";
 import {login} from "@/api/auth.ts";
+
+// 这里引入后会继承上下文，从当前VUE页面对象中弹出
 import {ElMessage} from "element-plus";
 import {storeAuthInfo} from "@/plugins/myAxios.ts";
 import {Lock, User} from "@element-plus/icons-vue";
