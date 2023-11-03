@@ -198,11 +198,7 @@ import {storeAuthInfo} from "@/plugins/myAxios.ts";
 const emit = defineEmits(['loginSuccess'])
 
 
-const loginForm = reactive({
-  username: "",
-  password: "",
-  remember: false
-});
+
 
 const registerForm = reactive({
   username: "",
@@ -213,14 +209,7 @@ const registerForm = reactive({
 });
 
 
-const rules = {
-  username: [
-    {required: true, message: '请输入用户名'}
-  ],
-  password: [
-    {required: true, message: '请输入密码'}
-  ]
-}
+
 
 
 
@@ -231,6 +220,29 @@ const afterRead = (file) => {
   // 此时可以自行将文件上传至服务器
   console.log(file);
 };
+
+const registerFormRef = ref();
+defineExpose({
+  isShow,
+  activeName,
+})
+
+// login
+
+const rules = {
+  username: [
+    {required: true, message: '请输入用户名'}
+  ],
+  password: [
+    {required: true, message: '请输入密码'}
+  ]
+}
+
+const loginForm = reactive({
+  username: "",
+  password: "",
+  remember: false
+});
 const userLogin = () => {
   loginFormRef.value.validate((valid) => {
     if (valid) {
@@ -251,11 +263,7 @@ const userLogin = () => {
   })
 }
 const loginFormRef = ref();
-const registerFormRef = ref();
-defineExpose({
-  isShow,
-  activeName,
-})
+
 
 </script>
 
