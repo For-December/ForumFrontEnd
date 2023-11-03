@@ -1,12 +1,13 @@
 <script setup lang="ts">
 
-import {reactive, ref} from "vue";
+import {onMounted, reactive, ref} from "vue";
 import {login} from "@/api/auth.ts";
 
 // 这里引入后会继承上下文，从当前VUE页面对象中弹出
 import {ElMessage} from "element-plus";
 import {storeAuthInfo} from "@/plugins/myAxios.ts";
 import {Lock, User} from "@element-plus/icons-vue";
+import {curUser} from "@/plugins/globalData.ts";
 
 const rules = {
   username: [
@@ -47,6 +48,9 @@ const userLogin = () => {
   })
 }
 const loginFormRef = ref();
+onMounted(()=>{
+  loginForm.username = curUser;
+})
 
 </script>
 

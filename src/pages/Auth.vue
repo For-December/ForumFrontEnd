@@ -26,7 +26,7 @@
 
 <script setup lang="ts">
 import {ref} from "vue";
-import {authed} from "@/plugins/globalData.ts";
+import {authed, curUser} from "@/plugins/globalData.ts";
 import LoginPage from "@/pages/auths/LoginPage.vue";
 import RegisterPage from "@/pages/auths/RegisterPage.vue";
 
@@ -35,8 +35,8 @@ const isShow = ref(false)
 const activeName = ref('Register')
 // login
 
-const loginNode =  ref<InstanceType<typeof LoginPage>>();
-const registerNode =  ref<InstanceType<typeof RegisterPage>>();
+const loginNode = ref<InstanceType<typeof LoginPage>>();
+const registerNode = ref<InstanceType<typeof RegisterPage>>();
 // 定义接口保留给 Home.vue
 const emit = defineEmits(['loginSuccess'])
 const loginSuccess = () => {
@@ -46,8 +46,9 @@ const loginSuccess = () => {
   authed.value = true;
 }
 
-const registerSuccess = () => {
+const registerSuccess = (username:string) => {
   activeName.value = 'Login'
+  curUser.value = username
 }
 
 // Home直接使用
@@ -55,8 +56,6 @@ defineExpose({
   isShow,
   activeName,
 })
-
-
 
 
 </script>

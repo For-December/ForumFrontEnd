@@ -32,7 +32,7 @@ const afterRead = (file:any) => {
 
 const onRegister = ()=>{
 
-  emit('registerSuccess')
+  emit('registerSuccess',registerForm.username)
   ElMessage.success('注册成功！')
 }
 defineExpose({
