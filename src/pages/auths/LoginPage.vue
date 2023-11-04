@@ -49,7 +49,7 @@ const userLogin = () => {
 }
 const loginFormRef = ref();
 onMounted(()=>{
-  loginForm.username = curUser;
+  loginForm.username = curUser.value;
 })
 
 </script>
