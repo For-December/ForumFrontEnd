@@ -3,6 +3,7 @@
 import {EditPen, Lock, Message, User} from "@element-plus/icons-vue";
 import {reactive, ref} from "vue";
 import {ElMessage} from "element-plus";
+import {askCode} from "@/api/auth.ts";
 
 
 const registerForm = reactive({
@@ -17,22 +18,64 @@ const registerForm = reactive({
 // 为 Auth 定义接口
 const emit = defineEmits(['registerSuccess'])
 
+const validateUsername = (_: any, value: string, callback: any) => {
+  if (value === '') {
+    callback(new Error('请输入用户名'))
+  } else if (!/^[a-zA-Z0-9\u4e00-\u9fa5]+$/.test(value)) {
+    callback(new Error('用户名不能包含特殊字符~'))
+  } else {
+    callback()
+  }
+
+}
+const validatePassword = (_: any, value: string, callback: any) => {
+  if (value === '') {
+    callback(new Error('请再次输入密码'))
+  } else if (value !== registerForm.password) {
+    callback(new Error('两次输入的密码不一致~'))
+  } else {
+    callback()
+  }
+}
 const rules = {
   username: [
-    {required: true, message: '请输入用户名'}
+    {validator: validateUsername, trigger: ['blur', 'change']},
   ],
   password: [
-    {required: true, message: '请输入密码'}
+    {required: true, message: '请输入密码', trigger: 'blur'},
+    {min: 6, max: 25, message: '密码长度应在6-25个字符之间', trigger: ['blur', 'change']}
+  ],
+  passwordAgain: [
+    {validator: validatePassword, trigger: ['blur', 'change']}
+  ],
+  email: [
+    {required: true, message: '请输入邮件地址', trigger: ['blur', 'change']},
+    {type: 'email', message: '邮件地址格式不合法~', trigger: ['blur', 'change']}
+  ],
+  code: [
+    {required: true, message: '请输入刚刚获取的验证码', trigger: 'blur'}
   ]
+
 }
-const afterRead = (file:any) => {
+const verifyCode = () => {
+  if (/^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/
+      .test(registerForm.email)) {
+    askCode(registerForm.email, 'register').then(() => {
+
+      ElMessage.success(`验证码已发送至您的邮箱：${registerForm.email}，请注意查收~`)
+    })
+  } else {
+    ElMessage.warning('您输入的电子邮件格式不正确~')
+  }
+}
+const afterRead = (file: any) => {
   // 此时可以自行将文件上传至服务器
   console.log(file);
 };
 
-const onRegister = ()=>{
+const onRegister = () => {
 
-  emit('registerSuccess',registerForm.username)
+  emit('registerSuccess', registerForm.username)
   ElMessage.success('注册成功！')
 }
 defineExpose({
@@ -120,7 +163,7 @@ const registerFormRef = ref();
           </el-col>
           <el-col :span="2"></el-col>
           <el-col :span="5">
-            <el-button type="success">获取验证码</el-button>
+            <el-button @click="verifyCode" type="success">获取验证码</el-button>
 
           </el-col>
         </el-row>

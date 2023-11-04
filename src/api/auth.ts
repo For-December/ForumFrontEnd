@@ -26,3 +26,11 @@ export const logout = () => {
         url: '/auth/logout',
     });
 };
+
+export const askCode = (email: string, type: string) => {
+    return request({
+        method: 'get',
+        url: '/auth/ask-code',
+        params: {email: email, type: type},
+    });
+}
