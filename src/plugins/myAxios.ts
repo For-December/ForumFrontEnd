@@ -47,13 +47,16 @@ myAxios.interceptors.response.use(
         switch (+response?.status) {
             case 401: // 鉴权失败时执行此逻辑
                 if (response?.data.code !== 10005) {
-                    ElMessage.warning(response?.data.msg || '鉴权失败！');
+                    ElMessage.warning(response?.data.message || '鉴权失败！');
                 }
                 break;
             case 403: // 权限不够时执行此逻辑
-                ElMessage.warning(response?.data.msg || '权限不足！');
+                ElMessage.warning(response?.data.message || '权限不足！');
                 break;
 
+            case 400:
+                ElMessage.warning(response?.data.message || '请求信息有误！');
+                break;
             default: // 未知错误
                 console.log(error)
                 console.log(response)

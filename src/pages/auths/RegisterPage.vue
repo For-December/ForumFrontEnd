@@ -63,15 +63,19 @@ const isEmailValid = computed(() =>
     /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/
         .test(registerForm.email))
 const verifyCode = () => {
+  coldTime.value = 30
   if (isEmailValid.value) {
-    coldTime.value = 30
+
     askCode(registerForm.email, 'register').then(() => {
       ElMessage.success(`验证码已发送至您的邮箱：${registerForm.email}，请注意查收~`)
-      setInterval(() => coldTime.value--, 1000)
+    }).catch((data) => {
+      console.log(data)
     })
   } else {
     ElMessage.warning('您输入的电子邮件格式不正确~')
   }
+  setInterval(() => coldTime.value--, 1000)
+
 }
 const afterRead = (file: any) => {
   // 此时可以自行将文件上传至服务器
