@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
 import {EditPen, Lock, Message, User} from "@element-plus/icons-vue";
-import {reactive, ref} from "vue";
+import {computed, reactive, ref} from "vue";
 import {ElMessage} from "element-plus";
 import {askCode} from "@/api/auth.ts";
 
@@ -57,12 +57,17 @@ const rules = {
   ]
 
 }
-const verifyCode = () => {
-  if (/^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/
-      .test(registerForm.email)) {
-    askCode(registerForm.email, 'register').then(() => {
 
+const coldTime = ref(0);
+const isEmailValid = computed(() =>
+    /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/
+        .test(registerForm.email))
+const verifyCode = () => {
+  if (isEmailValid.value) {
+    coldTime.value = 30
+    askCode(registerForm.email, 'register').then(() => {
       ElMessage.success(`验证码已发送至您的邮箱：${registerForm.email}，请注意查收~`)
+      setInterval(() => coldTime.value--, 1000)
     })
   } else {
     ElMessage.warning('您输入的电子邮件格式不正确~')
@@ -163,7 +168,9 @@ const registerFormRef = ref();
           </el-col>
           <el-col :span="2"></el-col>
           <el-col :span="5">
-            <el-button @click="verifyCode" type="success">获取验证码</el-button>
+            <el-button @click="verifyCode" type="success" :disabled="!isEmailValid||coldTime>0">
+              {{ coldTime > 0 ? `还剩${coldTime}秒` : (isEmailValid ? '获取验证码' : '先输入邮箱') }}
+            </el-button>
 
           </el-col>
         </el-row>
