@@ -1,5 +1,7 @@
 declare module NetResp {
 
+    import PostRecords = Items.PostRecords;
+
     interface Authorize {
         username: string;
         role: string;
@@ -16,6 +18,13 @@ declare module NetResp {
         role: string;
         registerTime: Date;
         modifyTime: Date;
+    }
+
+    interface Posts {
+        records: PostRecords[];
+        total: number;
+        size: number;
+        current: number;
     }
 
 }

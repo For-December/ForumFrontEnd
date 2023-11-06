@@ -67,8 +67,9 @@ import {ElMessage} from "element-plus";
 import {takeAuthObj} from "@/plugins/myAxios.ts";
 import {userInfo} from "@/api/auth.ts";
 import {authed} from "@/plugins/globalData.ts";
+import {getPosts} from "@/api/post.ts";
 
-const list: Ref<Number[]> = ref([]);
+const list: Ref<string[]> = ref([]);
 const loadPosts = reactive({
   loading: false,
   finished: false,
@@ -120,11 +121,21 @@ const onRefresh = () => {
 }
 const onLoad = () => {
   ElMessage.warning("test")
+
+
+  getPosts(0, 10).then((data) => {
+    data.records.forEach(
+        (post) => {
+          list.value.push(post.title)
+        }
+    )
+  })
+  loadPosts.loading = false;
   // 异步更新数据
   // setTimeout 仅做示例，真实场景中一般为 ajax 请求
   setTimeout(() => {
     for (let i = 0; i < 10; i++) {
-      list.value.push(list.value.length + 1);
+      // list.value.push(list.value.length + 1);
     }
 
     // 加载状态结束
