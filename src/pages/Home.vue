@@ -17,13 +17,8 @@
           @load="onLoad"
       >
 
-        <van-cell v-for="item in list" :key="item as number" :title="item as number">
-          <p>好好好！</p>
-          <p>好好好！</p>
-          <p>好好好！</p>
-          <p>好好好！</p>
-          <p>好好好！</p>
-          <p>好好好！</p>
+        <van-cell v-for="item in list" :key="item.id as number" :title="item.title" :value="item.content">
+
         </van-cell>
       </van-list>
     </van-pull-refresh>
@@ -68,8 +63,9 @@ import {takeAuthObj} from "@/plugins/myAxios.ts";
 import {userInfo} from "@/api/auth.ts";
 import {authed} from "@/plugins/globalData.ts";
 import {getPosts} from "@/api/post.ts";
+import PostRecords = Items.PostRecords;
 
-const list: Ref<string[]> = ref([]);
+const list: Ref<PostRecords[]> = ref([]);
 const loadPosts = reactive({
   loading: false,
   finished: false,
@@ -126,7 +122,7 @@ const onLoad = () => {
   getPosts(0, 10).then((data) => {
     data.records.forEach(
         (post) => {
-          list.value.push(post.title)
+          list.value.push(post)
         }
     )
   })

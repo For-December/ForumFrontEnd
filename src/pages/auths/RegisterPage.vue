@@ -3,7 +3,7 @@
 import {EditPen, Lock, Message, User} from "@element-plus/icons-vue";
 import {computed, reactive, ref} from "vue";
 import {ElMessage} from "element-plus";
-import {askCode} from "@/api/auth.ts";
+import {askCode, register} from "@/api/auth.ts";
 
 
 const registerForm = reactive({
@@ -53,7 +53,7 @@ const rules = {
     {type: 'email', message: '邮件地址格式不合法~', trigger: ['blur', 'change']}
   ],
   code: [
-    {required: true, message: '请输入刚刚获取的验证码', trigger: 'blur'}
+    {required: true, message: '请输入刚刚获取的验证码', trigger: ['blur','change']}
   ]
 
 }
@@ -83,9 +83,18 @@ const afterRead = (file: any) => {
 };
 
 const onRegister = () => {
+  registerFormRef.value.validate((valid: Boolean) => {
+    if (valid) { // 格式校验合法
+      register(registerForm).then(() => {
 
+        emit('registerSuccess', registerForm.username)
+        ElMessage.success('注册成功！')
+      })
+    }
+  })
   emit('registerSuccess', registerForm.username)
-  ElMessage.success('注册成功！')
+
+
 }
 defineExpose({
   registerForm
@@ -158,7 +167,7 @@ const registerFormRef = ref();
           </template>
         </el-input>
       </el-form-item>
-      <el-form-item>
+      <el-form-item size="default" prop="code">
         <el-row>
           <el-col :span="15">
             <el-input v-model="registerForm.code" maxlength="6" type="text" placeholder="请输入验证码">

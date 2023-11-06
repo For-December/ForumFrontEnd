@@ -1,5 +1,5 @@
 <template>
-seet
+set
 </template>
 
 <script>

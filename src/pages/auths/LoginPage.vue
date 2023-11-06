@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import {onMounted, reactive, ref} from "vue";
+import {reactive, ref, watch} from "vue";
 import {login} from "@/api/auth.ts";
 
 // 这里引入后会继承上下文，从当前VUE页面对象中弹出
@@ -25,6 +25,11 @@ const loginForm = reactive({
   password: "",
   remember: false
 });
+
+watch(curUser, (newValue, _) => {
+  loginForm.username = newValue;
+
+})
 const userLogin = () => {
   loginFormRef.value.validate((valid: Boolean) => {
     if (valid) { // 格式校验合法
@@ -48,9 +53,7 @@ const userLogin = () => {
   })
 }
 const loginFormRef = ref();
-onMounted(()=>{
-  loginForm.username = curUser.value;
-})
+
 
 </script>
 

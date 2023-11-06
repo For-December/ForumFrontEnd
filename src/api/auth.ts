@@ -34,3 +34,11 @@ export const askCode = (email: string, type: string) => {
         params: {email: email, type: type},
     });
 }
+
+export const register = (data:any) => {
+    return request({
+        method: 'post',
+        url: '/auth/register',
+        data,
+    });
+}
