@@ -92,7 +92,7 @@ const onRegister = () => {
       })
     }
   })
-  emit('registerSuccess', registerForm.username)
+  // emit('registerSuccess', registerForm.username)
 
 
 }
