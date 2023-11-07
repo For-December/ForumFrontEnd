@@ -17,13 +17,43 @@
           @load="onLoad"
       >
 
-        <van-cell v-for="item in list" :key="item.id as number">
-          <Avatar style="width: 70px;height: 70px; margin: 0;"></Avatar>
+        <div v-for="item in list" :key="item.id as number">
+          <el-container>
+            <el-aside width="10vw">
+              <Avatar style="width: 10vw;height: 10vw; margin: 0;border-radius: 50%"></Avatar>
+            </el-aside>
+            <el-main style="padding-top: 0;">
+              forDece @forDece
+              <p style="margin: 0;font-size: 15px">2 分钟前</p>
+              <div>
+                <br/>
+                {{ item.title + "\n" }}
+                <p style="margin: 0;">芝士雪豹</p>
+              </div>
+              :title="item.title"
+              <p></p>
+              {{ item.content + "我是帖子的内容，没想到吧！！" }}
+
+              <van-row>
+                <van-col span="8" style="text-align: left">span: 8</van-col>
+                <van-col span="8" style="text-align: center">span: 8</van-col>
+                <van-col span="8" style="text-align: right"><el-button type="primary">评论</el-button></van-col>
+              </van-row>
+            </el-main>
+          </el-container>
+
+
           <div>
-            :title="item.title"
-            {{ item.title + "\n" }}
-            <p></p>
-            {{ item.content + "我是帖子的内容，没想到吧！！" }}
+
+
+
+            <!--            <van-cell title="单元格" icon="shop-o">-->
+            <!--              &lt;!&ndash; 使用 right-icon 插槽来自定义右侧图标 &ndash;&gt;-->
+            <!--              <template #right-icon>-->
+            <!--                ssm 阿哲-->
+            <!--                <van-icon name="search" class="search-icon" />-->
+            <!--              </template>-->
+            <!--            </van-cell>-->
 
             <!--            <van-skeleton title avatar :row="3" :loading="loading">-->
             <!--              <div>实际内容</div>-->
@@ -32,7 +62,7 @@
 
           </div>
 
-        </van-cell>
+        </div>
         <van-divider
             :style="{ color: '#1989fa', borderColor: '#1989fa', padding: '0 16px' }"
         >
@@ -197,6 +227,16 @@ const onLoad = () => {
   border-bottom: 1px solid rgb(128, 125, 125);
   font-size: 15px;
   outline: none;
+}
+
+.custom-title {
+  margin-right: 4px;
+  vertical-align: middle;
+}
+
+.search-icon {
+  font-size: 16px;
+  line-height: inherit;
 }
 
 </style>
