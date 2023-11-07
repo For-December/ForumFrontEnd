@@ -18,15 +18,27 @@
       >
 
         <van-cell v-for="item in list" :key="item.id as number">
+          <Avatar style="width: 70px;height: 70px; margin: 0;"></Avatar>
           <div>
             :title="item.title"
             {{ item.title + "\n" }}
             <p></p>
             {{ item.content + "我是帖子的内容，没想到吧！！" }}
+
+            <!--            <van-skeleton title avatar :row="3" :loading="loading">-->
+            <!--              <div>实际内容</div>-->
+            <!--            </van-skeleton>-->
+
+
           </div>
 
         </van-cell>
-        <p>#########################################################</p>
+        <van-divider
+            :style="{ color: '#1989fa', borderColor: '#1989fa', padding: '0 16px' }"
+        >
+          ######
+        </van-divider>
+
       </van-list>
     </van-pull-refresh>
 
@@ -72,7 +84,13 @@ import {userInfo} from "@/api/auth.ts";
 import {authed} from "@/plugins/globalData.ts";
 import {getPosts} from "@/api/post.ts";
 import PostRecords = Items.PostRecords;
+import {Avatar} from "@element-plus/icons-vue";
 
+const loading = ref(true);
+
+onMounted(() => {
+  loading.value = false;
+});
 const list: Ref<PostRecords[]> = ref([]);
 const loadPosts = reactive({
   loading: false,
