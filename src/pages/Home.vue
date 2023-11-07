@@ -17,11 +17,19 @@
           @load="onLoad"
       >
 
-        <van-cell v-for="item in list" :key="item.id as number" :title="item.title" :value="item.content">
+        <van-cell v-for="item in list" :key="item.id as number">
+          <div>
+            :title="item.title"
+            {{ item.title + "\n" }}
+            <p></p>
+            {{ item.content + "我是帖子的内容，没想到吧！！" }}
+          </div>
 
         </van-cell>
+        <p>#########################################################</p>
       </van-list>
     </van-pull-refresh>
+
   </template>
   <template v-else>
     <p></p>
@@ -115,6 +123,8 @@ const onRefresh = () => {
     count.value++;
   }, 1000);
 }
+
+
 const onLoad = () => {
   ElMessage.warning("test")
 
@@ -127,21 +137,22 @@ const onLoad = () => {
     )
   })
   loadPosts.loading = false;
+  loadPosts.finished = true;
   // 异步更新数据
   // setTimeout 仅做示例，真实场景中一般为 ajax 请求
-  setTimeout(() => {
-    for (let i = 0; i < 10; i++) {
-      // list.value.push(list.value.length + 1);
-    }
-
-    // 加载状态结束
-    loadPosts.loading = false;
-
-    // 数据全部加载完成
-    if (list.value.length >= 40) {
-      loadPosts.finished = true;
-    }
-  }, 1000);
+  // setTimeout(() => {
+  //   for (let i = 0; i < 10; i++) {
+  //     // list.value.push(list.value.length + 1);
+  //   }
+  //
+  //   // 加载状态结束
+  //   loadPosts.loading = false;
+  //
+  //   // 数据全部加载完成
+  //   if (list.value.length >= 40) {
+  //     loadPosts.finished = true;
+  //   }
+  // }, 1000);
 };
 
 </script>
