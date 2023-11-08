@@ -3,13 +3,7 @@
 
   <template v-if="authed">
     <van-pull-refresh v-model="loadPosts.refreshing" @refresh="onRefresh" success-text="好好好！">
-      <van-cell>
-
-        <p>1</p>
-        <p>1</p>
-        <p>1</p>
-        <p>1</p>
-      </van-cell>
+      <PostCreater />
       <van-list
           v-model:loading="loadPosts.loading"
           :finished="loadPosts.finished"
@@ -18,33 +12,43 @@
       >
 
         <div v-for="item in list" :key="item.id as number">
+          <van-divider
+              :style="{ color: '#678cb2', borderColor: '#78b2b2',marginTop: '7px'}"
+          />
+
+          <!--          <van-skeleton title avatar :row="3" :loading="true">-->
           <el-container>
-            <el-aside width="10vw">
-              <Avatar style="width: 10vw;height: 10vw; margin: 0;border-radius: 50%"></Avatar>
+            <el-aside width="12vw">
+<!--              <Avatar style="width: 10vw;height: 10vw; margin: 0;border-radius: 50%"></Avatar>-->
+              <el-avatar size="default" style="width: 12vw;height: 12vw;margin: 0;border-radius: 50%"
+                         src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
+              />
             </el-aside>
             <el-main style="padding-top: 0;">
               forDece @forDece
               <p style="margin: 0;font-size: 15px">2 分钟前</p>
               <div>
-                <br/>
-                {{ item.title + "\n" }}
-                <p style="margin: 0;">芝士雪豹</p>
+<!--                <br/>-->
+<!--                {{ item.title + "\n" }}-->
+<!--                <p style="margin: 0;">芝士雪豹</p>-->
               </div>
-              :title="item.title"
+              <!--              :title="item.title"-->
               <p></p>
-              {{ item.content + "我是帖子的内容，没想到吧！！" }}
+              {{ item.content  }}
+<!--              + "我是帖子的内容，没想到吧！！"-->
 
               <van-row>
-                <van-col span="8" style="text-align: left">span: 8</van-col>
-                <van-col span="8" style="text-align: center">span: 8</van-col>
-                <van-col span="8" style="text-align: right"><el-button type="primary">评论</el-button></van-col>
+                <van-col span="8" style="text-align: left">点赞: 8</van-col>
+                <van-col span="8" style="text-align: center">转发: 8</van-col>
+                <van-col span="8" style="text-align: right">
+                  <el-button type="primary">评论</el-button>
+                </van-col>
               </van-row>
             </el-main>
           </el-container>
 
-
+          <!--          </van-skeleton>-->
           <div>
-
 
 
             <!--            <van-cell title="单元格" icon="shop-o">-->
@@ -63,11 +67,15 @@
           </div>
 
         </div>
+        <!--                  <van-skeleton title avatar :row="3" :loading="true">-->
+
         <van-divider
             :style="{ color: '#1989fa', borderColor: '#1989fa', padding: '0 16px' }"
         >
           ######
         </van-divider>
+        <!--                  </van-skeleton>-->
+
 
       </van-list>
     </van-pull-refresh>
@@ -115,6 +123,7 @@ import {authed} from "@/plugins/globalData.ts";
 import {getPosts} from "@/api/post.ts";
 import PostRecords = Items.PostRecords;
 import {Avatar} from "@element-plus/icons-vue";
+import PostCreater from "@/pages/PostCreater.vue";
 
 const loading = ref(true);
 
@@ -163,19 +172,12 @@ const onAuth = (index: Number) => {
     console.log(index)
   }
 }
-const onRefresh = () => {
-  setTimeout(() => {
-    // showToast('刷新成功');
-    // ElMessage.success("刷新成功！")
-    loadPosts.refreshing = false;
-    count.value++;
-  }, 1000);
-}
 
 
 const onLoad = () => {
-  ElMessage.warning("test")
+  // ElMessage.warning("test")
 
+  list.value.length = 0;
 
   getPosts(0, 10).then((data) => {
     data.records.forEach(
@@ -202,7 +204,16 @@ const onLoad = () => {
   //   }
   // }, 1000);
 };
-
+const onRefresh = () => {
+  setTimeout(() => {
+    // showToast('刷新成功');
+    // ElMessage.success("刷新成功！")
+    loadPosts.refreshing = false;
+    loadPosts.finished = false;
+    count.value++;
+    onLoad();
+  }, 1000);
+}
 </script>
 
 
