@@ -26,9 +26,9 @@
             </el-aside>
             <el-main style="padding-top: 0;">
               forDece @{{ item.authorName }}
-<!--              <p style="margin: 0;font-size: 15px">2 分钟前</p>-->
+              <!--              <p style="margin: 0;font-size: 15px">2 分钟前</p>-->
               <p style="margin: 0;font-size: 15px">
-                {{getTimeGap(new Date(),new Date(item.latestRepliedTime))}}
+                {{ getTimeGap(new Date(), new Date(item.latestRepliedTime)) }}
 
               </p>
               <div>
@@ -140,21 +140,24 @@ const count = ref(0);
 // const authed = ref(false);
 
 const getTimeGap = (now: Date, last: Date): string => {
-  const yearGap = now.getFullYear() - last.getFullYear();
+  const millisecondsGap = now - last;
+  const yearGap = Math.floor(millisecondsGap / (1000 * 60 * 60 * 24 * 365));
   if (yearGap > 0) return yearGap + " 年前";
 
-  const monthGap = now.getMonth() - last.getMonth();
+
+  const monthGap = Math.floor(millisecondsGap / (1000 * 60 * 60 * 24 * 30));
   if (monthGap > 0) return monthGap + " 月前";
 
-  const dayGap = now.getDay() - last.getDay();
+  const dayGap = Math.floor(millisecondsGap / (1000 * 60 * 60 * 24));
   if (dayGap > 0) return dayGap + " 天前";
 
-  const hourGap = now.getHours() - last.getHours();
+  const hourGap = Math.floor(millisecondsGap / (1000 * 60 * 60));
   if (hourGap > 0) return hourGap + " 小时前";
 
-  const minuteGap = now.getMinutes() - last.getMinutes();
+  const minuteGap = Math.floor(millisecondsGap / (1000 * 60));
   if (minuteGap > 0) return minuteGap + " 分钟前";
-  const secondGap = now.getSeconds() - last.getSeconds();
+
+  const secondGap = Math.floor(millisecondsGap / (1000));
   if (secondGap > 0) return secondGap + " 秒前";
   return "刚刚";
 
