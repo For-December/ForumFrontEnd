@@ -3,7 +3,7 @@ declare module NetResp {
     import PostRecords = Items.PostRecords;
 
     interface Authorize {
-        username: string;
+        username: string; // id最好还是后端处理
         role: string;
         token: string;
         expire: Date;

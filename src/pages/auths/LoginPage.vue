@@ -39,8 +39,8 @@ const userLogin = () => {
         // 调用Auth中的函数来传递信息
         emit('loginSuccess');
         // isShow.value = false; 该语句通过上句在Auth执行
-
         ElMessage.success("登陆成功！")
+        curUser.value = loginForm.username;
         storeAuthInfo(data)
       }).catch((err) => {
         console.log(err)

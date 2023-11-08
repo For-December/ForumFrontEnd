@@ -12,4 +12,12 @@ declare module NetParams {
         /** 密码 */
         password: string;
     }
+
+    interface CreatePostParam {
+        authorId: number;
+        authorName: string,
+        content: string;
+        tags: string;
+    }
+
 }

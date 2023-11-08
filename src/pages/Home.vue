@@ -3,7 +3,7 @@
 
   <template v-if="authed">
     <van-pull-refresh v-model="loadPosts.refreshing" @refresh="onRefresh" success-text="好好好！">
-      <PostCreater />
+      <PostCreator @loadAgain="onLoad"/>
       <van-list
           v-model:loading="loadPosts.loading"
           :finished="loadPosts.finished"
@@ -119,17 +119,13 @@ import Auth from "./Auth.vue";
 import {ElMessage} from "element-plus";
 import {takeAuthObj} from "@/plugins/myAxios.ts";
 import {userInfo} from "@/api/auth.ts";
-import {authed} from "@/plugins/globalData.ts";
+import {authed, curUser, curUserId} from "@/plugins/globalData.ts";
 import {getPosts} from "@/api/post.ts";
 import PostRecords = Items.PostRecords;
-import {Avatar} from "@element-plus/icons-vue";
-import PostCreater from "@/pages/PostCreater.vue";
+import PostCreator from "@/pages/PostCreater.vue";
 
 const loading = ref(true);
 
-onMounted(() => {
-  loading.value = false;
-});
 const list: Ref<PostRecords[]> = ref([]);
 const loadPosts = reactive({
   loading: false,
@@ -139,14 +135,17 @@ const loadPosts = reactive({
 const count = ref(0);
 // const authed = ref(false);
 
+// 钩子函数
 onMounted(() => {
+  loading.value = false;
   // 实现自动认证并登录
   const authObj = takeAuthObj();
   console.log(authObj)
   if (authObj) {
     userInfo(authObj.username).then((data) => {
       authed.value = true;
-      // authed.value=true;
+      curUser.value = authObj.username;
+      curUserId.value = data.id
       console.log(data);
     }).catch((err) => {
       console.log(err);
@@ -175,7 +174,7 @@ const onAuth = (index: Number) => {
 
 
 const onLoad = () => {
-  // ElMessage.warning("test")
+  ElMessage.warning("test")
 
   list.value.length = 0;
 
@@ -214,6 +213,8 @@ const onRefresh = () => {
     onLoad();
   }, 1000);
 }
+
+
 </script>
 
 
