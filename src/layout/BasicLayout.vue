@@ -21,12 +21,15 @@
       <Home/>
     </template>
     <template v-if="active === 1">
-      <Self/>
+      <TreeHole/>
     </template>
     <template v-if="active === 2">
-      <Settings/>
-
+      <Self/>
     </template>
+    <template v-if="active === 3">
+      <Settings/>
+    </template>
+
 
   </div>
 
@@ -34,6 +37,7 @@
     <!--    <van-button type="primary">主要按钮</van-button>-->
     <van-sidebar v-model="active" @change="onChange" :style="{width: 'auto',marginTop:'20vh'}">
       <van-sidebar-item class="test" to="/" title="广场" dot/>
+      <van-sidebar-item class="test" to="/tree-hole" title="树洞" dot/>
       <van-sidebar-item class="test" to="self" title="个人"/>
       <van-sidebar-item class="test" to="settings" title="设置"/>
 
@@ -53,6 +57,7 @@ import Settings from '../pages/Settings.vue'
 import {logout} from "@/api/auth.ts";
 import {authed} from "@/plugins/globalData.ts";
 import {deleteAccessToken} from "@/plugins/myAxios.ts";
+import TreeHole from "@/pages/TreeHole.vue";
 
 
 const active = ref(0);
