@@ -19,23 +19,27 @@
           <!--          <van-skeleton title avatar :row="3" :loading="true">-->
           <el-container>
             <el-aside width="12vw">
-<!--              <Avatar style="width: 10vw;height: 10vw; margin: 0;border-radius: 50%"></Avatar>-->
+              <!--              <Avatar style="width: 10vw;height: 10vw; margin: 0;border-radius: 50%"></Avatar>-->
               <el-avatar size="default" style="width: 12vw;height: 12vw;margin: 0;border-radius: 50%"
                          src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
               />
             </el-aside>
             <el-main style="padding-top: 0;">
-              forDece @forDece
-              <p style="margin: 0;font-size: 15px">2 分钟前</p>
+              forDece @{{ item.authorName }}
+<!--              <p style="margin: 0;font-size: 15px">2 分钟前</p>-->
+              <p style="margin: 0;font-size: 15px">
+                {{getTimeGap(new Date(),new Date(item.latestRepliedTime))}}
+
+              </p>
               <div>
-<!--                <br/>-->
-<!--                {{ item.title + "\n" }}-->
-<!--                <p style="margin: 0;">芝士雪豹</p>-->
+                <!--                <br/>-->
+                <!--                {{ item.title + "\n" }}-->
+                <!--                <p style="margin: 0;">芝士雪豹</p>-->
               </div>
               <!--              :title="item.title"-->
               <p></p>
-              {{ item.content  }}
-<!--              + "我是帖子的内容，没想到吧！！"-->
+              {{ item.content }}
+              <!--              + "我是帖子的内容，没想到吧！！"-->
 
               <van-row>
                 <van-col span="8" style="text-align: left">点赞: 8</van-col>
@@ -114,7 +118,7 @@
 </template>
 
 <script setup lang="ts">
-import {onMounted, reactive, Ref, ref} from "vue";
+import {computed, onMounted, reactive, Ref, ref} from "vue";
 import Auth from "./Auth.vue";
 import {ElMessage} from "element-plus";
 import {takeAuthObj} from "@/plugins/myAxios.ts";
@@ -134,6 +138,27 @@ const loadPosts = reactive({
 });
 const count = ref(0);
 // const authed = ref(false);
+
+const getTimeGap = (now: Date, last: Date): string => {
+  const yearGap = now.getFullYear() - last.getFullYear();
+  if (yearGap > 0) return yearGap + " 年前";
+
+  const monthGap = now.getMonth() - last.getMonth();
+  if (monthGap > 0) return monthGap + " 月前";
+
+  const dayGap = now.getDay() - last.getDay();
+  if (dayGap > 0) return dayGap + " 天前";
+
+  const hourGap = now.getHours() - last.getHours();
+  if (hourGap > 0) return hourGap + " 小时前";
+
+  const minuteGap = now.getMinutes() - last.getMinutes();
+  if (minuteGap > 0) return minuteGap + " 分钟前";
+  const secondGap = now.getSeconds() - last.getSeconds();
+  if (secondGap > 0) return secondGap + " 秒前";
+  return "刚刚";
+
+}
 
 // 钩子函数
 onMounted(() => {

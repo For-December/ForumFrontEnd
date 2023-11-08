@@ -2,6 +2,7 @@ declare module Items {
     interface PostRecords {
         id: number;
         authorId: number;
+        authorName: string;
         commentCount: number;
         upvoteCount: number;
         tags: string;
