@@ -1,7 +1,8 @@
 <template>
   <van-nav-bar
       title="标题"
-      left-text="菜单"
+      :left-text="leftText"
+      :left-arrow="isChild"
       @click-left="onClickLeft"
       @click-right="onClickRight"
       :fixed="true"
@@ -17,18 +18,20 @@
   <!--  <van-button type="primary" @click="toggleSidebar">Toggle Sidebar</van-button>-->
 
   <div id="content">
-    <template v-if="active === 0">
-      <Home/>
-    </template>
-    <template v-if="active === 1">
-      <TreeHole/>
-    </template>
-    <template v-if="active === 2">
-      <Self/>
-    </template>
-    <template v-if="active === 3">
-      <Settings/>
-    </template>
+    <router-view>
+    </router-view>
+    <!--    <template v-if="active === 0">-->
+    <!--      <Home/>-->
+    <!--    </template>-->
+    <!--    <template v-if="active === 1">-->
+    <!--      <TreeHole/>-->
+    <!--    </template>-->
+    <!--    <template v-if="active === 2">-->
+    <!--      <Self/>-->
+    <!--    </template>-->
+    <!--    <template v-if="active === 3">-->
+    <!--      <Settings/>-->
+    <!--    </template>-->
 
 
   </div>
@@ -36,7 +39,7 @@
   <van-popup v-model:show="show" position="left" :style="{ width: '50%', height: '100%' }">
     <!--    <van-button type="primary">主要按钮</van-button>-->
     <van-sidebar v-model="active" @change="onChange" :style="{width: 'auto',marginTop:'20vh'}">
-      <van-sidebar-item class="test" to="/" title="广场" dot/>
+      <van-sidebar-item class="test" to="/home" title="广场" dot/>
       <van-sidebar-item class="test" to="/tree-hole" title="树洞" dot/>
       <van-sidebar-item class="test" to="self" title="个人"/>
       <van-sidebar-item class="test" to="settings" title="设置"/>
@@ -50,7 +53,7 @@
 <script setup>
 import {showToast} from 'vant';
 import {ElMessage} from "element-plus";
-import {ref} from 'vue';
+import {computed, ref} from 'vue';
 import Home from '../pages/Home.vue'
 import Self from '../pages/Self.vue'
 import Settings from '../pages/Settings.vue'
@@ -58,14 +61,28 @@ import {logout} from "@/api/auth.ts";
 import {authed} from "@/plugins/globalData.ts";
 import {deleteAccessToken} from "@/plugins/myAxios.ts";
 import TreeHole from "@/pages/TreeHole.vue";
+import {useRoute, useRouter} from "vue-router";
 
 
 const active = ref(0);
+const route = useRoute();
+const router = useRouter();
 const onChange = (index) => showToast(`标签 ${index}`);
+const leftText = computed(() => isChild.value ? '返回' : '菜单')
+const isChild = computed(() => {
+  return active.value === 0 && route.path !== '/home';
+});
+
 
 const show = ref(false);
 const onClickLeft = () => {
-  show.value = true;
+  if (!isChild.value) {
+    show.value = true;
+  } else {
+    router.push({
+      name: 'home',
+    });
+  }
 };
 const onClickRight = () => showToast('按钮');
 const userLogout = () => {

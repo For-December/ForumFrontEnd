@@ -24,8 +24,14 @@
                          src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
               />
             </el-aside>
-            <el-main style="padding-top: 0;">
-              forDece @{{ item.authorName }}
+            <el-main style="padding-top: 0;" @click="goPostDetail(item.id)">
+              <el-row>
+                <el-col :span="12">forDece @{{ item.authorName }}</el-col>
+                <el-col :span="12">
+                  <div style="float: right">删除 分享</div>
+                </el-col>
+              </el-row>
+
               <!--              <p style="margin: 0;font-size: 15px">2 分钟前</p>-->
               <p style="margin: 0;font-size: 15px">
                 {{ getTimeGap(new Date(), new Date(item.latestRepliedTime)) }}
@@ -118,7 +124,7 @@
 </template>
 
 <script setup lang="ts">
-import {computed, onMounted, reactive, Ref, ref} from "vue";
+import {onMounted, reactive, Ref, ref} from "vue";
 import Auth from "./Auth.vue";
 import {ElMessage} from "element-plus";
 import {takeAuthObj} from "@/plugins/myAxios.ts";
@@ -127,6 +133,7 @@ import {authed, curUser, curUserId} from "@/plugins/globalData.ts";
 import {getPosts} from "@/api/post.ts";
 import PostRecords = Items.PostRecords;
 import PostCreator from "@/pages/PostCreater.vue";
+import {useRouter} from "vue-router";
 
 const loading = ref(true);
 
@@ -140,7 +147,7 @@ const count = ref(0);
 // const authed = ref(false);
 
 const getTimeGap = (now: Date, last: Date): string => {
-  const millisecondsGap = now - last;
+  const millisecondsGap = now.valueOf() - last.valueOf();
   const yearGap = Math.floor(millisecondsGap / (1000 * 60 * 60 * 24 * 365));
   if (yearGap > 0) return yearGap + " 年前";
 
@@ -162,6 +169,17 @@ const getTimeGap = (now: Date, last: Date): string => {
   return "刚刚";
 
 }
+
+const router = useRouter();
+const goPostDetail = (id: number) => {
+  router.push({
+    name: 'postDetail',
+    query: {
+      id,
+    },
+  });
+};
+
 
 // 钩子函数
 onMounted(() => {
