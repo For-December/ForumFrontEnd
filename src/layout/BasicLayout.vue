@@ -54,13 +54,9 @@
 import {showToast} from 'vant';
 import {ElMessage} from "element-plus";
 import {computed, ref} from 'vue';
-import Home from '../pages/Home.vue'
-import Profile from '../pages/Profile.vue'
-import Settings from '../pages/Settings.vue'
 import {logout} from "@/api/auth.ts";
 import {authed} from "@/plugins/globalData.ts";
 import {deleteAccessToken} from "@/plugins/myAxios.ts";
-import TreeHole from "@/pages/TreeHole.vue";
 import {useRoute, useRouter} from "vue-router";
 
 
@@ -87,6 +83,7 @@ const onClickLeft = () => {
 const onClickRight = () => showToast('按钮');
 const userLogout = () => {
   logout().then((data) => {
+    console.log(data);
     ElMessage.success("成功退出登录！");
     authed.value = false;
     show.value = false;

@@ -49,13 +49,21 @@ router.beforeEach((to, from, next) => {
 
     console.log(from.path)
     console.log(to.path)
+
+    if (
+        from.path === '/' // 访问根目录
+        && to.name !== 'home'
+    ) {
+        // 将用户重定向到登录页面
+        next({name: 'home'})
+        return
+    }
+
     // 检查用户是否已登录
     if (
         !authed.value &&
         // ❗️ 避免无限重定向
         to.name !== 'home'
-        || from.path === '/' // 访问根目录
-        && to.name !== 'home'
     ) {
         authAndLogin().then((isLogin) => {
             if (isLogin) {

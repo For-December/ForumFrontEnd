@@ -12,7 +12,7 @@ const post = ref<PostRecords>();
 
 console.log(route)
 console.log(router)
-onMounted(()=>{
+onMounted(() => {
   console.log(id)
   getPostById(id).then(data => {
     post.value = data;
@@ -24,8 +24,8 @@ onMounted(()=>{
 
 <template>
   {{ id }}
-  {{post?.title}}
-  {{post?.content}}
+  {{ post?.title }}
+  {{ post?.content }}
 </template>
 
 <style scoped>
