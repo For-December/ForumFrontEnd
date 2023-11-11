@@ -41,7 +41,7 @@
     <van-sidebar v-model="active" @change="onChange" :style="{width: 'auto',marginTop:'20vh'}">
       <van-sidebar-item class="test" to="/home" title="广场" dot/>
       <van-sidebar-item class="test" to="/tree-hole" title="树洞" dot/>
-      <van-sidebar-item class="test" to="self" title="个人"/>
+      <van-sidebar-item class="test" to="profile" title="个人"/>
       <van-sidebar-item class="test" to="settings" title="设置"/>
 
     </van-sidebar>
@@ -55,7 +55,7 @@ import {showToast} from 'vant';
 import {ElMessage} from "element-plus";
 import {computed, ref} from 'vue';
 import Home from '../pages/Home.vue'
-import Self from '../pages/Self.vue'
+import Profile from '../pages/Profile.vue'
 import Settings from '../pages/Settings.vue'
 import {logout} from "@/api/auth.ts";
 import {authed} from "@/plugins/globalData.ts";
