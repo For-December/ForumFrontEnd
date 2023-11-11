@@ -6,7 +6,10 @@ import {Button, NavBar, Popup} from "vant";
 import * as VueRouter from 'vue-router';
 import routes from "./config/router";
 import 'element-plus/dist/index.css'
-import {authed} from "@/plugins/globalData.ts";
+import {authed, curUser, curUserId} from "@/plugins/globalData.ts";
+import {takeAuthObj} from "@/plugins/myAxios.ts";
+import {userInfo} from "@/api/auth.ts";
+import {authAndLogin} from "@/plugins/globalFunc.ts";
 
 
 // 3. 创建路由实例并传递 `routes` 配置
@@ -29,9 +32,20 @@ router.beforeEach((to, from, next) => {
         || from.path === '/' // 访问根目录
         && to.name !== 'home'
     ) {
-        console.log("未登录~")
-        // 将用户重定向到登录页面
-        next({name: 'home'})
+        authAndLogin().then((isLogin) => {
+            if (isLogin) {
+                console.log('已登录')
+                // 不重定向
+                next()
+                return
+            }
+            console.log(isLogin)
+            console.log("未登录~")
+            // 将用户重定向到登录页面
+            next({name: 'home'})
+        });
+
+
     } else {
 
         document.title = `${to.meta.title} | 测试`;
