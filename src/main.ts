@@ -34,7 +34,7 @@ router.beforeEach((to, from, next) => {
         next({name: 'home'})
     } else {
 
-        document.title = `${to.meta.title} | 泡泡 - 一个清新文艺的微社区`;
+        document.title = `${to.meta.title} | 测试`;
         next();
     }
 });
