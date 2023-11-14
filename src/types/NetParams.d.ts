@@ -20,4 +20,10 @@ declare module NetParams {
         tags: string;
     }
 
+    interface CreateCommentParam {
+        authorId: number;
+        authorName: string,
+        postId: number;
+        content: string;
+    }
 }

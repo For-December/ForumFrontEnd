@@ -1,6 +1,7 @@
 declare module NetResp {
 
     import PostRecords = Items.PostRecords;
+    import CommentRecords = Items.CommentRecords;
 
     interface Authorize {
         username: string; // id最好还是后端处理
@@ -27,4 +28,10 @@ declare module NetResp {
         current: number;
     }
 
+    interface Comments {
+        records: CommentRecords[];
+        total: number;
+        size: number;
+        current: number;
+    }
 }

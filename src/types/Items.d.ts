@@ -12,4 +12,15 @@ declare module Items {
         createTime: Date;
         modifyTime: Date;
     }
+
+    interface CommentRecords {
+        id: number;
+        postId: number;
+        authorId: number;
+        authorName: string;
+        upvoteCount: number;
+        content: string;
+        createTime: Date;
+        modifyTime: Date;
+    }
 }
