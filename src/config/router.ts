@@ -51,8 +51,7 @@ router.beforeEach((to, from, next) => {
     console.log(to.path)
 
     if (
-        from.path === '/' // 访问根目录
-        && to.name !== 'home'
+        to.path === '/' // 访问根目录
     ) {
         // 将用户重定向到登录页面
         next({name: 'home'})
