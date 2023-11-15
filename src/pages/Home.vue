@@ -132,7 +132,7 @@ import {userInfo} from "@/api/auth.ts";
 import {authed, curUser, curUserId} from "@/plugins/globalData.ts";
 import {getPosts} from "@/api/post.ts";
 import PostRecords = Items.PostRecords;
-import PostCreator from "@/pages/PostCreater.vue";
+import PostCreator from "@/pages/PostCreator.vue";
 import {useRouter} from "vue-router";
 
 const loading = ref(true);
