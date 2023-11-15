@@ -107,13 +107,17 @@ const onDelete = (id: number, postId: number, authorName: string) => {
       <van-col span="8" style="text-align: left">点赞: 8</van-col>
       <van-col span="8" style="text-align: center">转发: 8</van-col>
       <van-col span="8" style="text-align: right">
-        <el-button type="primary">评论</el-button>
+        评论：8
       </van-col>
     </van-row>
-
-    <CommentCreator @loadAgain="onLoad" :post-id="id"/>
-
+    <van-divider
+        :style="{ color: '#7ade7b', borderColor: '#5d9671', padding: '0 16px' }"
+    >
+      评论
+    </van-divider>
   </div>
+
+  <CommentCreator @loadAgain="onLoad" :post-id="id"/>
 
 
   <van-pull-refresh v-model="loadComments.refreshing" @refresh="onRefresh" success-text="好好好！">
@@ -187,6 +191,10 @@ const onDelete = (id: number, postId: number, authorName: string) => {
 
 
   </van-pull-refresh>
+
+<!--  回到顶端-->
+  <van-back-top/>
+
 </template>
 
 <style scoped>
