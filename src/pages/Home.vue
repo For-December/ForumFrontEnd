@@ -3,6 +3,12 @@
 
   <template v-if="authed">
     <van-pull-refresh v-model="loadPosts.refreshing" @refresh="onRefresh" success-text="好好好！">
+      <van-divider
+          :style="{ color: '#7ade7b', borderColor: '#5d9671', padding: '0 16px' }"
+      >
+        下拉刷新
+      </van-divider>
+
       <PostCreator @loadAgain="onLoad"/>
       <van-list
           v-model:loading="loadPosts.loading"
