@@ -8,6 +8,7 @@ import CommentRecords = Items.CommentRecords;
 import {ElMessage} from "element-plus";
 import {getComments} from "@/api/comment.ts";
 import CommentCreator from "@/pages/CommentCreator.vue";
+import {getTimeGap} from "../plugins/globalFunc.ts";
 
 const route = useRoute()
 const router = useRouter()
@@ -134,7 +135,7 @@ const onRefresh = () => {
 
             <!--              <p style="margin: 0;font-size: 15px">2 分钟前</p>-->
             <p style="margin: 0;font-size: 15px">
-              00000
+<!--              00000-->{{getTimeGap(new Date(),new Date(item.modifyTime))}}
             </p>
             <div>
               <!--                <br/>-->
