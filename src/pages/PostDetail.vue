@@ -6,9 +6,10 @@ import PostRecords = Items.PostRecords;
 import {onMounted, reactive, Ref, ref} from "vue";
 import CommentRecords = Items.CommentRecords;
 import {ElMessage} from "element-plus";
-import {getComments} from "@/api/comment.ts";
+import {deleteCommentById, getComments} from "@/api/comment.ts";
 import CommentCreator from "@/pages/CommentCreator.vue";
 import {getTimeGap} from "../plugins/globalFunc.ts";
+import {Delete} from "@element-plus/icons-vue";
 
 const route = useRoute()
 const router = useRouter()
@@ -56,6 +57,13 @@ const onRefresh = () => {
     count.value++;
     onLoad();
   }, 1000);
+}
+
+const onDelete = (id: number, postId: number, authorName: string) => {
+  deleteCommentById(id, postId, authorName).then(() => {
+    onLoad();
+    ElMessage.success("评论删除成功！")
+  })
 }
 
 </script>
@@ -129,13 +137,16 @@ const onRefresh = () => {
             <el-row>
               <el-col :span="12">forDece @{{ item.authorName }}</el-col>
               <el-col :span="12">
-                <div style="float: right">删除 回复</div>
+                <div style="float: right">
+                  <el-button type="warning" :icon="Delete" size="small" circle
+                             @click="onDelete(item.id,item.postId,item.authorName)"/>
+                </div>
               </el-col>
             </el-row>
 
             <!--              <p style="margin: 0;font-size: 15px">2 分钟前</p>-->
             <p style="margin: 0;font-size: 15px">
-<!--              00000-->{{getTimeGap(new Date(),new Date(item.modifyTime))}}
+              <!--              00000-->{{ getTimeGap(new Date(), new Date(item.modifyTime)) }}
             </p>
             <div>
               <!--                <br/>-->

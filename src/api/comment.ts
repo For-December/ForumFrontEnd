@@ -25,3 +25,11 @@ export const getCommentById = (id: number): Promise<CommentRecords> => {
         url: `/comments/${id}`,
     });
 };
+
+export const deleteCommentById = (id: number, postId: number, authorName: string) => {
+    return request({
+        method: "delete",
+        url: `/comments/${id}`,
+        params: {postId, authorName}
+    });
+};
