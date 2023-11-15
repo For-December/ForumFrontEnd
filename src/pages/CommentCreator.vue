@@ -10,7 +10,7 @@ const emit = defineEmits(['loadAgain']) // 定义接口，PostDetail.vue实现
 
 const props = defineProps({
   postId: {
-    type: String, // 这里填Number会有警告，不知道为什么...
+    // type: Number, // 这里填Number会有警告，不知道为什么...
     required: true,
     default: -1,  // 为负值后端返回错误码并拒绝处理
     validator: value => {
