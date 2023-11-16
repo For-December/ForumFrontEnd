@@ -32,7 +32,7 @@
             </el-aside>
             <el-main style="padding-top: 0;" @click="goPostDetail(item.id)">
               <el-row>
-                <el-col :span="12">forDece @{{ item.authorName }}</el-col>
+                <el-col :span="12">{{item.authorName}} @{{ item.authorName }}</el-col>
                 <el-col :span="12">
                   <div style="float: right">删除 分享</div>
                 </el-col>

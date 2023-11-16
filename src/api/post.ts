@@ -25,3 +25,12 @@ export const getPostById = (id: number): Promise<PostRecords> => {
         url: `/posts/${id}`,
     });
 };
+
+// 帖子点赞
+export const postStar = (postId: number, userId: number) => {
+    return request({
+        method: "post",
+        url: `/v1/posts/star/${postId}`,
+        params: {userId}
+    });
+};

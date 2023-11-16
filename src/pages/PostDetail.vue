@@ -9,7 +9,9 @@ import {ElMessage} from "element-plus";
 import {deleteCommentById, getComments} from "@/api/comment.ts";
 import CommentCreator from "@/pages/CommentCreator.vue";
 import {getTimeGap} from "../plugins/globalFunc.ts";
-import {Delete} from "@element-plus/icons-vue";
+import {Delete, InfoFilled} from "@element-plus/icons-vue";
+import {curUserId} from "@/plugins/globalData.ts";
+import {showToast} from "vant";
 
 const route = useRoute()
 const router = useRouter()
@@ -31,7 +33,7 @@ const loadComments = reactive({
   finished: false,
   refreshing: false,
 });
-
+const replyMessage = ref('');
 const onLoad = () => {
   ElMessage.warning("test")
 
@@ -66,6 +68,16 @@ const onDelete = (id: number, postId: number, authorName: string) => {
   })
 }
 
+
+const showPopover = ref(false);
+
+// 通过 actions 属性来定义菜单选项
+const actions = [
+  {text: '选项一'},
+  {text: '选项二'},
+  {text: '选项三'},
+];
+const onSelect = (action) => showToast(action.text);
 </script>
 
 <template>
@@ -80,7 +92,7 @@ const onDelete = (id: number, postId: number, authorName: string) => {
         />
       </el-col>
       <el-col :span="20">
-        forDece @{{ post?.authorName }}<br/>
+        {{ post?.authorName }} @{{ post?.authorName }}<br/>
         2 分钟前
       </el-col>
     </el-row>
@@ -149,11 +161,34 @@ const onDelete = (id: number, postId: number, authorName: string) => {
           </el-aside>
           <el-main style="padding-top: 0;">
             <el-row>
-              <el-col :span="12">forDece @{{ item.authorName }}</el-col>
+              <el-col :span="12">{{ item.authorName }} @{{ item.authorName }}</el-col>
               <el-col :span="12">
                 <div style="float: right">
-                  <el-button type="warning" :icon="Delete" size="small" circle
-                             @click="onDelete(item.id,item.postId,item.authorName)"/>
+                  <!--                  <van-popover v-model:show="showPopover" :actions="actions" @select="onSelect">-->
+                  <!--                    <template #reference>-->
+                  <!--                      <van-button type="primary">浅色风格</van-button>-->
+                  <!--                    </template>-->
+                  <!--                  </van-popover>-->
+
+
+                  <el-popconfirm
+                      confirm-button-text="Yes"
+                      cancel-button-text="No"
+                      :icon="InfoFilled"
+                      icon-color="#626AEF"
+                      title="确定要删除此评论?"
+                      @confirm="onDelete(item.id,item.postId,item.authorName)"
+                      @cancel=""
+                  >
+                    <template #reference>
+                      <el-button :type="curUserId!==item.authorId?'warning':'success'" :icon="Delete" size="small"
+                                 circle
+                                 :disabled="curUserId!==item.authorId"
+                      />
+                    </template>
+                  </el-popconfirm>
+
+
                 </div>
               </el-col>
             </el-row>
@@ -171,6 +206,25 @@ const onDelete = (id: number, postId: number, authorName: string) => {
             <p></p>
             {{ item.content }}
             <!--              + "我是帖子的内容，没想到吧！！"-->
+<!--            <p></p>-->
+<!--            <el-button>回复</el-button>-->
+
+<!--            <div v-if="true">-->
+<!--              <el-row>-->
+<!--                <el-col :span="18">-->
+<!--                  <el-input v-model="replyMessage" size="small" placeholder="在此输入回复" :maxlength="50"-->
+<!--                            show-word-limit-->
+<!--                            clearable/>-->
+<!--                </el-col>-->
+<!--                <el-col :span="6">-->
+<!--                  <el-button type="primary" size="small" @click="">-->
+<!--                    回复-->
+<!--                  </el-button>-->
+<!--                </el-col>-->
+<!--              </el-row>-->
+
+
+<!--            </div>-->
           </el-main>
         </el-container>
 
@@ -192,7 +246,7 @@ const onDelete = (id: number, postId: number, authorName: string) => {
 
   </van-pull-refresh>
 
-<!--  回到顶端-->
+  <!--  回到顶端-->
   <van-back-top/>
 
 </template>
