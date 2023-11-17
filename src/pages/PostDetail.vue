@@ -12,12 +12,15 @@ import {getTimeGap} from "../plugins/globalFunc.ts";
 import {Delete, InfoFilled} from "@element-plus/icons-vue";
 import {curUserId} from "@/plugins/globalData.ts";
 import {showToast} from "vant";
+import {Icon} from "@vicons/utils";
+import HeartOutline from "@vicons/ionicons5/HeartOutline"
+import Heart from "@vicons/ionicons5/Heart"
 
 const route = useRoute()
 const router = useRouter()
 const id: number = route.query.id as unknown as number;
 const post = ref<PostRecords>();
-
+const isStar = ref(false);
 console.log(route)
 console.log(router)
 onMounted(() => {
@@ -115,8 +118,13 @@ const onSelect = (action) => showToast(action.text);
     </div>
     <!--              + "我是帖子的内容，没想到吧！！"-->
     <p></p>
-    <van-row style="margin: 5vw">
-      <van-col span="8" style="text-align: left">点赞: 8</van-col>
+    <van-row style="margin: 5vw;">
+      <van-col span="8" style="text-align: left">
+        <Icon @click="isStar=!isStar" size="5vw">
+          <HeartOutline v-if="isStar"/>
+          <Heart v-else style="color: red"/>
+        </Icon>
+      </van-col>
       <van-col span="8" style="text-align: center">转发: 8</van-col>
       <van-col span="8" style="text-align: right">
         评论：8
@@ -172,6 +180,7 @@ const onSelect = (action) => showToast(action.text);
 
 
                   <el-popconfirm
+                      v-if="curUserId===item.authorId"
                       confirm-button-text="Yes"
                       cancel-button-text="No"
                       :icon="InfoFilled"
@@ -181,9 +190,8 @@ const onSelect = (action) => showToast(action.text);
                       @cancel=""
                   >
                     <template #reference>
-                      <el-button :type="curUserId!==item.authorId?'warning':'success'" :icon="Delete" size="small"
+                      <el-button v-if="curUserId===item.authorId" :type="'warning'" :icon="Delete" size="small"
                                  circle
-                                 :disabled="curUserId!==item.authorId"
                       />
                     </template>
                   </el-popconfirm>
@@ -206,33 +214,29 @@ const onSelect = (action) => showToast(action.text);
             <p></p>
             {{ item.content }}
             <!--              + "我是帖子的内容，没想到吧！！"-->
-<!--            <p></p>-->
-<!--            <el-button>回复</el-button>-->
+            <!--            <p></p>-->
+            <!--            <el-button>回复</el-button>-->
 
-<!--            <div v-if="true">-->
-<!--              <el-row>-->
-<!--                <el-col :span="18">-->
-<!--                  <el-input v-model="replyMessage" size="small" placeholder="在此输入回复" :maxlength="50"-->
-<!--                            show-word-limit-->
-<!--                            clearable/>-->
-<!--                </el-col>-->
-<!--                <el-col :span="6">-->
-<!--                  <el-button type="primary" size="small" @click="">-->
-<!--                    回复-->
-<!--                  </el-button>-->
-<!--                </el-col>-->
-<!--              </el-row>-->
+            <!--            <div v-if="true">-->
+            <!--              <el-row>-->
+            <!--                <el-col :span="18">-->
+            <!--                  <el-input v-model="replyMessage" size="small" placeholder="在此输入回复" :maxlength="50"-->
+            <!--                            show-word-limit-->
+            <!--                            clearable/>-->
+            <!--                </el-col>-->
+            <!--                <el-col :span="6">-->
+            <!--                  <el-button type="primary" size="small" @click="">-->
+            <!--                    回复-->
+            <!--                  </el-button>-->
+            <!--                </el-col>-->
+            <!--              </el-row>-->
 
 
-<!--            </div>-->
+            <!--            </div>-->
           </el-main>
         </el-container>
 
         <!--          </van-skeleton>-->
-        <div>
-
-
-        </div>
 
       </div>
       <!--                  <van-skeleton title avatar :row="3" :loading="true">-->
@@ -242,8 +246,6 @@ const onSelect = (action) => showToast(action.text);
         ######
       </van-divider>
     </van-list>
-
-
   </van-pull-refresh>
 
   <!--  回到顶端-->
