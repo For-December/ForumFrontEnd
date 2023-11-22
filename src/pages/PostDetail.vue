@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
 import {useRoute, useRouter} from "vue-router";
-import {getPostById, getStar, postStar} from "@/api/post.ts";
+import {getPostById, getStar, getStarsList, postStar} from "@/api/post.ts";
 import PostRecords = Items.PostRecords;
 import {onMounted, reactive, Ref, ref} from "vue";
 import CommentRecords = Items.CommentRecords;
@@ -21,10 +21,16 @@ const router = useRouter()
 const id: number = route.query.id as unknown as number;
 const post = ref<PostRecords>();
 const isStar = ref(false);
+const starNum = ref<number>();
 
 const starTimer = ref();
 const onStar = () => {
   isStar.value = !isStar.value;
+  if (isStar.value) {
+    starNum.value!++;
+  } else {
+    starNum.value!--;
+  }
   // 重置计时器
   clearTimeout(starTimer.value)
   // 在3秒后执行异步API调用
@@ -41,9 +47,15 @@ onMounted(() => {
   getPostById(id).then(data => {
     post.value = data;
   });
-  getStar(id, curUserId.value, curUser.value).then((status)=>{
-    console.log("set star: ",status);
+  getStar(id, curUserId.value, curUser.value).then((status) => {
+    console.log("set star: ", status);
     isStar.value = status;
+  })
+
+  getStarsList([id]).then((starsList) => {
+    starNum.value = starsList.length > 0 ? starsList[0] : 0;
+    console.log(starsList)
+    console.log(starNum.value)
   })
 })
 
@@ -136,11 +148,14 @@ const onSelect = (action) => showToast(action.text);
     <!--              + "我是帖子的内容，没想到吧！！"-->
     <p></p>
     <van-row style="margin: 5vw;">
-      <van-col span="8" style="text-align: left">
+      <van-col span="2" style="text-align: left">
         <Icon @click="onStar" size="5vw">
           <HeartOutline v-if="!isStar"/>
           <Heart v-else style="color: red"/>
         </Icon>
+      </van-col>
+      <van-col span="6" style="text-align: left">
+        {{ starNum }}
       </van-col>
       <van-col span="8" style="text-align: center">转发: 8</van-col>
       <van-col span="8" style="text-align: right">

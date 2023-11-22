@@ -43,3 +43,13 @@ export const getStar = (postId: number, userId: number, userName: string): Promi
         params: {userId, userName}
     });
 };
+
+// 查询所有贴子的赞数量
+export const getStarsList = (postIdList: number[]): Promise<number[]> => {
+    console.log(postIdList)
+    return request({
+        method: "post",
+        url: `/posts/stars`,
+        data: postIdList,
+    });
+}
