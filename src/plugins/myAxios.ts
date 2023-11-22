@@ -34,7 +34,7 @@ myAxios.interceptors.response.use(
         // 这里不再传递message了，因为是前端预期中的结果
         const {data = {}, code = 0} = response?.data || {};
         if (+code === 200) {
-            return data || {};
+            return data;
         }
 
         return Promise.reject(response?.data || {});

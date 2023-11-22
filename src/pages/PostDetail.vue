@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
 import {useRoute, useRouter} from "vue-router";
-import {getPostById} from "@/api/post.ts";
+import {getPostById, getStar, postStar} from "@/api/post.ts";
 import PostRecords = Items.PostRecords;
 import {onMounted, reactive, Ref, ref} from "vue";
 import CommentRecords = Items.CommentRecords;
@@ -10,7 +10,7 @@ import {deleteCommentById, getComments} from "@/api/comment.ts";
 import CommentCreator from "@/pages/CommentCreator.vue";
 import {getTimeGap} from "../plugins/globalFunc.ts";
 import {Delete, InfoFilled} from "@element-plus/icons-vue";
-import {curUserId} from "@/plugins/globalData.ts";
+import {curUser, curUserId} from "@/plugins/globalData.ts";
 import {showToast} from "vant";
 import {Icon} from "@vicons/utils";
 import HeartOutline from "@vicons/ionicons5/HeartOutline"
@@ -21,6 +21,19 @@ const router = useRouter()
 const id: number = route.query.id as unknown as number;
 const post = ref<PostRecords>();
 const isStar = ref(false);
+
+const starTimer = ref();
+const onStar = () => {
+  isStar.value = !isStar.value;
+  // 重置计时器
+  clearTimeout(starTimer.value)
+  // 在3秒后执行异步API调用
+  starTimer.value = setTimeout(() => {
+    postStar(id, curUserId.value, curUser.value, isStar.value).then((status) => {
+      console.log(status)
+    })
+  }, 1000);
+}
 console.log(route)
 console.log(router)
 onMounted(() => {
@@ -28,6 +41,10 @@ onMounted(() => {
   getPostById(id).then(data => {
     post.value = data;
   });
+  getStar(id, curUserId.value, curUser.value).then((status)=>{
+    console.log("set star: ",status);
+    isStar.value = status;
+  })
 })
 
 const comments: Ref<CommentRecords[]> = ref([]);
@@ -120,8 +137,8 @@ const onSelect = (action) => showToast(action.text);
     <p></p>
     <van-row style="margin: 5vw;">
       <van-col span="8" style="text-align: left">
-        <Icon @click="isStar=!isStar" size="5vw">
-          <HeartOutline v-if="isStar"/>
+        <Icon @click="onStar" size="5vw">
+          <HeartOutline v-if="!isStar"/>
           <Heart v-else style="color: red"/>
         </Icon>
       </van-col>

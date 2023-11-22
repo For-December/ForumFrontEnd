@@ -27,10 +27,19 @@ export const getPostById = (id: number): Promise<PostRecords> => {
 };
 
 // 帖子点赞
-export const postStar = (postId: number, userId: number) => {
+export const postStar = (postId: number, userId: number, userName: string, like: boolean): Promise<boolean> => {
     return request({
         method: "post",
-        url: `/v1/posts/star/${postId}`,
-        params: {userId}
+        url: `/posts/star/${postId}`,
+        params: {userId, userName, like}
+    });
+};
+
+
+export const getStar = (postId: number, userId: number, userName: string): Promise<boolean> => {
+    return request({
+        method: "get",
+        url: `/posts/star/${postId}`,
+        params: {userId, userName}
     });
 };
