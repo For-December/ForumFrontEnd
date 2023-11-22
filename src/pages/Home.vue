@@ -32,7 +32,7 @@
             </el-aside>
             <el-main style="padding-top: 0;" @click="goPostDetail(item.id)">
               <el-row>
-                <el-col :span="12">{{item.authorName}} @{{ item.authorName }}</el-col>
+                <el-col :span="12">{{ item.authorName }} @{{ item.authorName }}</el-col>
                 <el-col :span="12">
                   <div style="float: right">删除 分享</div>
                 </el-col>
@@ -54,7 +54,7 @@
               <!--              + "我是帖子的内容，没想到吧！！"-->
 
               <van-row>
-                <van-col span="8" style="text-align: left">点赞: 8</van-col>
+                <van-col span="8" style="text-align: left">点赞: {{ item.upvoteCount }}</van-col>
                 <van-col span="8" style="text-align: center">转发: 8</van-col>
                 <van-col span="8" style="text-align: right">
                   <el-button type="primary">评论</el-button>
@@ -136,7 +136,7 @@ import {ElMessage} from "element-plus";
 import {takeAuthObj} from "@/plugins/myAxios.ts";
 import {userInfo} from "@/api/auth.ts";
 import {authed, curUser, curUserId} from "@/plugins/globalData.ts";
-import {getPosts} from "@/api/post.ts";
+import {getPosts, getStarsList} from "@/api/post.ts";
 import PostRecords = Items.PostRecords;
 import PostCreator from "@/pages/PostCreator.vue";
 import {useRouter} from "vue-router";
@@ -152,7 +152,6 @@ const loadPosts = reactive({
 });
 const count = ref(0);
 // const authed = ref(false);
-
 
 
 const router = useRouter();
@@ -215,6 +214,13 @@ const onLoad = () => {
           list.value.push(post)
         }
     )
+
+    // 为list添加点赞数
+    getStarsList(list.value.map(t => t.id)).then((starsList) => {
+      for (let i = 0; i < list.value.length; i++) {
+        list.value[i].upvoteCount = starsList[i];
+      }
+    })
   })
   loadPosts.loading = false;
   loadPosts.finished = true;
