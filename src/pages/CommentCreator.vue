@@ -7,7 +7,7 @@ import {createComment} from "@/api/comment.ts";
 const message = ref("");
 
 const emit = defineEmits(['loadAgain']) // 定义接口，PostDetail.vue实现
-
+const lockComment = ref(false);
 const props = defineProps({
   postId: {
     // type: Number, // 这里填Number会有警告，不知道为什么...
@@ -19,18 +19,35 @@ const props = defineProps({
   }
 });
 const newComment = () => {
+  lockComment.value = true;
+  if (message.value.length === 0) {
+    ElMessage.warning("评论不能为空嗷~");
+
+    setTimeout(() => {
+      lockComment.value = false;
+    }, 500);
+    return
+  }
+
   createComment({
     authorId: curUserId.value,
     authorName: curUser.value,
     content: message.value,
-    postId:props.postId
+    postId: props.postId
   }).then(
       () => {
         // 调用 Home.vue的方法
         emit('loadAgain')
+        message.value = ''
+        lockComment.value = false;
         ElMessage.success("评论成功！");
       }
-  )
+  ).catch(() => {
+    setTimeout(() => {
+      lockComment.value = false;
+
+    }, 1000);
+  })
 }
 </script>
 
@@ -52,7 +69,7 @@ const newComment = () => {
           placeholder="请输入您的评论~"
           show-word-limit
       />
-      <el-button type="success" style="float: right" @click="newComment">评论</el-button>
+      <el-button type="success" style="float: right" @click="newComment" :loading="lockComment">评论</el-button>
     </el-main>
   </el-container>
 
