@@ -10,13 +10,17 @@
       </van-divider>
 
       <PostCreator @loadAgain="onLoad"/>
+
+      <div v-for="rows in [5,5,5,5,5,5,5,5,5,5,5]">
+        <van-skeleton title :row="rows" :loading="loadPosts.loading">
+        </van-skeleton>
+      </div>
       <van-list
           v-model:loading="loadPosts.loading"
           :finished="loadPosts.finished"
           finished-text="没有更多了"
           @load="onLoad"
       >
-
         <div v-for="item in list" :key="item.id as number">
           <van-divider
               :style="{ color: '#678cb2', borderColor: '#78b2b2',marginTop: '7px'}"
@@ -50,7 +54,25 @@
               </div>
               <!--              :title="item.title"-->
               <p></p>
-              {{ item.content }}
+              <div v-for="meta in JSON.parse(item.contentJson) as PostMeta[]">
+                <div v-if="meta.type==='image'">
+                  <van-image
+                      :src="meta.url"
+                  >
+                    <template v-slot:loading>
+                      <van-loading type="spinner" size="20"/>
+                    </template>
+                    <template v-slot:error>图片加载失败</template>
+                  </van-image>
+                  <br/>
+                  <br/>
+                </div>
+                <div v-if="meta.type==='text'">
+                  {{ meta.text }}
+                  <br/>
+                  <br/>
+                </div>
+              </div>
               <!--              + "我是帖子的内容，没想到吧！！"-->
 
               <van-row>
@@ -98,6 +120,12 @@
 
   </template>
   <template v-else>
+    <div v-for="rows in [5,5,5,5,5,5,5,5,5,5,5]">
+      <van-skeleton title :row="rows" :loading="loading">
+      </van-skeleton>
+    </div>
+
+
     <p></p>
     <van-row justify="center">
       <van-col span="10" offset="2" style="text-align: center">登录以了解更多……</van-col>
@@ -141,7 +169,9 @@ import PostRecords = Items.PostRecords;
 import PostCreator from "@/pages/PostCreator.vue";
 import {useRouter} from "vue-router";
 import {getTimeGap} from "../plugins/globalFunc.ts";
+import PostMeta = Items.PostMeta;
 
+// 整个页面是否加载中
 const loading = ref(true);
 
 const list: Ref<PostRecords[]> = ref([]);
@@ -167,7 +197,6 @@ const goPostDetail = (id: number) => {
 
 // 钩子函数
 onMounted(() => {
-  loading.value = false;
   // 实现自动认证并登录
   const authObj = takeAuthObj();
   console.log(authObj)
@@ -215,15 +244,22 @@ const onLoad = () => {
         }
     )
 
-    // 为list添加点赞数
+    // 贴子加载完成后才能加载每个贴子对应的点赞数
+    // 允许先显示贴子，后同步点赞数
     getStarsList(list.value.map(t => t.id)).then((starsList) => {
       for (let i = 0; i < list.value.length; i++) {
         list.value[i].upvoteCount = starsList[i];
       }
     })
+
+    loadPosts.loading = false;
+    loadPosts.finished = true;
   })
-  loadPosts.loading = false;
-  loadPosts.finished = true;
+
+  // 为list添加点赞数
+
+
+  console.log(list.value)
   // 异步更新数据
   // setTimeout 仅做示例，真实场景中一般为 ajax 请求
   // setTimeout(() => {

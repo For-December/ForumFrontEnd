@@ -8,9 +8,15 @@ declare module Items {
         tags: string;
         title: string;
         content: string;
+        contentJson: string;
         latestRepliedTime: Date;
         createTime: Date;
         modifyTime: Date;
+    }
+    interface PostMeta{
+        type: string;
+        text:string;
+        url:string;
     }
 
     interface CommentRecords {

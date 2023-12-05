@@ -15,14 +15,16 @@ import {showToast} from "vant";
 import {Icon} from "@vicons/utils";
 import HeartOutline from "@vicons/ionicons5/HeartOutline"
 import Heart from "@vicons/ionicons5/Heart"
+import PostMeta = Items.PostMeta;
 
 const route = useRoute()
 const router = useRouter()
 const id: number = route.query.id as unknown as number;
-const post = ref<PostRecords>();
+const post = ref<PostRecords>() as Ref<PostRecords>;
 const isStar = ref(false);
 const starNum = ref<number>();
 
+const loading = ref<boolean>(true);
 const starTimer = ref();
 const onStar = () => {
   isStar.value = !isStar.value;
@@ -45,8 +47,13 @@ console.log(router)
 onMounted(() => {
   console.log(id)
   getPostById(id).then(data => {
+    console.log(data)
     post.value = data;
+
+    // 异步加载完贴子即可展示，点赞信息允许稍后加载
+    loading.value = false
   });
+
   getStar(id, curUserId.value, curUser.value).then((status) => {
     console.log("set star: ", status);
     isStar.value = status;
@@ -66,11 +73,12 @@ const loadComments = reactive({
   refreshing: false,
 });
 const replyMessage = ref('');
+
+
+// 评论区装载
 const onLoad = () => {
   ElMessage.warning("test")
-
   comments.value.length = 0;
-
   getComments(id, 0, 10).then((data) => {
     data.records.forEach(
         (comment) => {
@@ -113,61 +121,91 @@ const onSelect = (action) => showToast(action.text);
 </script>
 
 <template>
+
+
+<!--  <van-loading vertical>-->
+<!--    <template #icon>-->
+<!--      <van-icon name="star-o" size="30" />-->
+<!--    </template>-->
+<!--    加载中...-->
+<!--  </van-loading>-->
+  <van-skeleton title :row="5" :loading="loading">
+      <div>
+        <el-row>
+          <el-col :span="4">
+            <el-avatar size="default" style="width: 12vw;height: 12vw;margin: 0;border-radius: 50%"
+                       src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
+            />
+          </el-col>
+          <el-col :span="20">
+            {{ post?.authorName }} @{{ post?.authorName }}<br/>
+            {{ getTimeGap(new Date(), new Date(post?.latestRepliedTime!)) }}
+          </el-col>
+        </el-row>
+
+        <!--              <p style="margin: 0;font-size: 15px">2 分钟前</p>-->
+        <p style="margin: 0;font-size: 15px">
+
+        </p>
+        <div>
+          <!--                <br/>-->
+          <!--                {{ item.title + "\n" }}-->
+          <!--                <p style="margin: 0;">芝士雪豹</p>-->
+        </div>
+        <!--              :title="item.title"-->
+        <p></p>
+        <div style="margin: 5vw">
+
+          <div v-for="meta in JSON.parse(post?.contentJson) as PostMeta[]">
+            <div v-if="meta.type==='image'">
+              <van-image
+                  :src="meta.url"
+              >
+                <template v-slot:loading>
+                  <van-loading type="spinner" size="20"/>
+                </template>
+                <template v-slot:error>图片加载失败</template>
+              </van-image>
+              <br/>
+              <br/>
+            </div>
+            <div v-if="meta.type==='text'">
+              {{ meta.text }}
+              <br/>
+              <br/>
+            </div>
+          </div>
+
+        </div>
+        <p></p>
+        <van-row style="margin: 5vw;">
+          <van-col span="2" style="text-align: left">
+            <Icon @click="onStar" size="5vw">
+              <HeartOutline v-if="!isStar"/>
+              <Heart v-else style="color: red"/>
+            </Icon>
+          </van-col>
+          <van-col span="6" style="text-align: left">
+            {{ starNum }}
+          </van-col>
+          <van-col span="8" style="text-align: center">转发: 8</van-col>
+          <van-col span="8" style="text-align: right">
+            评论：8
+          </van-col>
+        </van-row>
+        <van-divider
+            :style="{ color: '#7ade7b', borderColor: '#5d9671', padding: '0 16px' }"
+        >
+          评论
+        </van-divider>
+      </div>
+  </van-skeleton>
+
+
   <!--  {{ id }}-->
   <!--  {{ post?.title }}-->
   <!--  {{ post?.content }}-->
-  <div>
-    <el-row>
-      <el-col :span="4">
-        <el-avatar size="default" style="width: 12vw;height: 12vw;margin: 0;border-radius: 50%"
-                   src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
-        />
-      </el-col>
-      <el-col :span="20">
-        {{ post?.authorName }} @{{ post?.authorName }}<br/>
-        2 分钟前
-      </el-col>
-    </el-row>
 
-    <!--              <p style="margin: 0;font-size: 15px">2 分钟前</p>-->
-    <p style="margin: 0;font-size: 15px">
-
-    </p>
-    <div>
-      <!--                <br/>-->
-      <!--                {{ item.title + "\n" }}-->
-      <!--                <p style="margin: 0;">芝士雪豹</p>-->
-    </div>
-    <!--              :title="item.title"-->
-    <p></p>
-    <div style="margin: 5vw">
-      {{ post?.title }} <br/>
-      {{ post?.content }}
-
-    </div>
-    <!--              + "我是帖子的内容，没想到吧！！"-->
-    <p></p>
-    <van-row style="margin: 5vw;">
-      <van-col span="2" style="text-align: left">
-        <Icon @click="onStar" size="5vw">
-          <HeartOutline v-if="!isStar"/>
-          <Heart v-else style="color: red"/>
-        </Icon>
-      </van-col>
-      <van-col span="6" style="text-align: left">
-        {{ starNum }}
-      </van-col>
-      <van-col span="8" style="text-align: center">转发: 8</van-col>
-      <van-col span="8" style="text-align: right">
-        评论：8
-      </van-col>
-    </van-row>
-    <van-divider
-        :style="{ color: '#7ade7b', borderColor: '#5d9671', padding: '0 16px' }"
-    >
-      评论
-    </van-divider>
-  </div>
 
   <CommentCreator @loadAgain="onLoad" :post-id="id"/>
 
