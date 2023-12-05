@@ -206,8 +206,13 @@ onMounted(() => {
       console.log(data);
     }).catch((err) => {
       console.log(err);
+    }).finally(()=>{
+      // 不管如何，结束加载
+      loading.value=false;
     })
 
+  }else {
+    loading.value=false;
   }
 })
 const loginSuccess = () => {

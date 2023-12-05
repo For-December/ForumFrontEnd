@@ -106,7 +106,7 @@ const newPost = () => {
       />
       <div>
         <el-button type="success" :icon="PictureFilled" circle @click="uploadImage"/>
-        <el-button type="success" style="float: right" @click="newPost">发帖</el-button>
+        <el-button type="success" style="float: right" @click="newPost" loading>发帖</el-button>
       </div>
 
 
