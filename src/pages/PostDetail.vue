@@ -104,7 +104,7 @@ const onClickImage = (url: string) => {
 
 // 评论区装载
 const onLoad = () => {
-  ElMessage.warning("test")
+  // ElMessage.warning("test")
   comments.value.length = 0;
   getComments(id, 0, 10).then((data) => {
     data.records.forEach(

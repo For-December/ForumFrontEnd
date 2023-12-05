@@ -231,7 +231,7 @@ const onAuth = (index: Number) => {
 
 
 const onLoad = () => {
-  ElMessage.warning("test")
+  // ElMessage.warning("test")
 
   list.value.length = 0;
 
