@@ -16,7 +16,8 @@ declare module NetParams {
     interface CreatePostParam {
         authorId: number;
         authorName: string,
-        content: string;
+        text: string;
+        images: File[];
         tags: string;
     }
 

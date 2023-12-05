@@ -12,10 +12,19 @@ export const getPosts = (pageNum: number, pageSize: number): Promise<Posts> => {
 };
 
 export const createPost = (data: CreatePostParam) => {
+    console.log(data)
+    const formData = new FormData();
+    formData.append('authorId', data.authorId.toString());
+    formData.append('authorName', data.authorName)
+    formData.append('text', data.text)
+    data.images.forEach(image => formData.append('images', image));
+    formData.append('tags', data.tags)
+    console.log(formData)
     return request({
         method: "post",
         url: "/posts",
-        data
+        headers: {'Content-Type': 'multipart/form-data'},
+        data: formData,
     });
 };
 
