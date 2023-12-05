@@ -12,6 +12,8 @@ const message = ref("");
 
 const emit = defineEmits(['loadAgain']) // 定义接口，home.vue实现
 
+const isPostCreating = ref(false)
+
 const isUploading = ref<boolean>(false);
 const fileList = ref<UploaderFileListItem[]>([])
 
@@ -64,6 +66,7 @@ const uploadImage = () => {
   isUploading.value = !isUploading.value
 }
 const newPost = () => {
+  isPostCreating.value = true;
   console.log(fileList.value)
   let files: File[] = fileList.value.map(t => t?.file!);
   console.log(files)
@@ -82,7 +85,9 @@ const newPost = () => {
         files.length = 0
         isUploading.value = false
       }
-  )
+  ).finally(() => {
+    isPostCreating.value = false
+  })
 }
 </script>
 
@@ -106,7 +111,9 @@ const newPost = () => {
       />
       <div>
         <el-button type="success" :icon="PictureFilled" circle @click="uploadImage"/>
-        <el-button type="success" style="float: right" @click="newPost" loading>发帖</el-button>
+        <el-button type="success" style="float: right" @click="newPost" :loading="isPostCreating">
+          {{ isPostCreating ? '审核中' : '发帖' }}
+        </el-button>
       </div>
 
 
