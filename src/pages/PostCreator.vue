@@ -78,6 +78,9 @@ const newPost = () => {
         // 调用 Home.vue的方法
         emit('loadAgain')
         ElMessage.success("发帖成功！");
+        message.value = ''
+        files.length = 0
+        isUploading.value = false
       }
   )
 }
