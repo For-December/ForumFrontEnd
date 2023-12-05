@@ -64,8 +64,6 @@
                     </template>
                     <template v-slot:error>图片加载失败</template>
                   </van-image>
-                  <br/>
-                  <br/>
                 </div>
                 <div v-if="meta.type==='text'">
                   {{ meta.text }}
