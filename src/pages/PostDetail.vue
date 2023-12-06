@@ -207,6 +207,13 @@ const onSelect = (action) => showToast(action.text);
             <br/>
             <br/>
           </div>
+          <div v-if="meta.type==='video'">
+            <video controls width="300" height="100">
+              <source :src="meta.url" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+          </div>
+
         </div>
 
       </div>
