@@ -35,7 +35,7 @@ const onStar = () => {
   }
   // 重置计时器
   clearTimeout(starTimer.value)
-  // 在3秒后执行异步API调用
+  // 在1秒后执行异步API调用
   starTimer.value = setTimeout(() => {
     postStar(id, curUserId.value, curUser.value, isStar.value).then((status) => {
       console.log(status)
